@@ -11,6 +11,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.text());
 
 routes(app);
+
+
 const PORT= process.env.PORT || 3000
 app.listen(PORT, function () {  
 
