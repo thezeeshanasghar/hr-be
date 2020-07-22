@@ -62,6 +62,21 @@ const SocialSecuritydefaultPath='/SocialSecurity';
 const SocialSecuritySecondaryPath=SocialSecuritydefaultPath+'/:Id';
 const SocialSecurityByCompany=SocialSecuritydefaultPath+'/ByCompany/:CompanyId';
 //#endregion
+//#region Unit
+const UnitdefaultPath='/SocialSecurity';
+const UnitSecondaryPath=UnitdefaultPath+'/:Id';
+const UnitByCompany=UnitdefaultPath+'/ByCompany/:CompanyId';
+//#endregion
+//#region Unpaidleaves
+const UnpaidleavesdefaultPath='/Unpaidleaves';
+const UnpaidleavesSecondaryPath=UnpaidleavesdefaultPath+'/:Id';
+const UnpaidleavesByCompany=UnpaidleavesdefaultPath+'/ByCompany/:CompanyId';
+//#endregion
+//#region userProtection
+const userProtectiondefaultPath='/userProtection';
+const userProtectionSecondaryPath=userProtectiondefaultPath+'/:Id';
+const userProtectionByCompany=userProtectiondefaultPath+'/ByCompany/:CompanyId';
+//#endregion
 const message={
 	"success":"Operation successfull",
 	"error":"Operation Unsuccessfull",
@@ -74,4 +89,6 @@ module.exports={userloginPath,message,defaultPath,BankSecondaryPath,Companydefau
 				GradesdefaultPath,GradesSecondaryPath,GradesByCompany,JobdefaultPath,JobSecondaryPath,JobByCompany,
 				PayElementdefaultPath,PayElementSecondaryPath,PayElementByCompany,PayElementGLAccountdefaultPath,
 				PayElementGLAccountSecondaryPath,PositiondefaultPath,PositionSecondaryPath,PositionByCompany,
-				SocialSecuritydefaultPath,SocialSecuritySecondaryPath,SocialSecurityByCompany};
+				SocialSecuritydefaultPath,SocialSecuritySecondaryPath,SocialSecurityByCompany,
+				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
+				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany};
