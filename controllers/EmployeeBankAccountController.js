@@ -15,10 +15,10 @@ router.get(BankAccSecondaryPath, async (req, res) => {
 router.post(BankAccByCompany, async (req, res) => {
 	InsertEmployeeBankAccount(req, res);
 })
-router.put(ExchangeSecondaryPath, async (req, res) => {
+router.put(BankAccSecondaryPath, async (req, res) => {
 	UpdateEmployeeBankAccount(req, res);
 })
-router.delete(ExchangeSecondaryPath, async (req, res) => {
+router.delete(BankAccSecondaryPath, async (req, res) => {
 	 DeleteEmployeeBankAccount(req, res);
 })
 module.exports = router;

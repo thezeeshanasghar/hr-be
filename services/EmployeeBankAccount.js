@@ -72,7 +72,7 @@
 	const InsertEmployeeBankAccount = async (req, res) => {
 		try {
 			var query = "Insert into EmployeeBankAccount(CompanyId, EmployeeId, BankId, IBAN, CurrencyCode, EffectiveDate, IsPrimary)"
-						+="values('"+req.body.CompanyId+"','"+req.body.EmployeeId+"','"+req.body.BankId+"','"+req.body.IBAN+"','"+req.body.CurrencyCode+"','"+req.body.EffectiveDate+"','"+req.body.IsPrimary+"');";
+						+" values('"+req.body.CompanyId+"','"+req.body.EmployeeId+"','"+req.body.BankId+"','"+req.body.IBAN+"','"+req.body.CurrencyCode+"','"+req.body.EffectiveDate+"','"+req.body.IsPrimary+"');";
 			const pool = await poolPromise
 			const result = await pool.request()
 				.query(query, function (err, profileset) {
