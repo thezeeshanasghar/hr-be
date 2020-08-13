@@ -49,7 +49,7 @@ const GetBankById = async (req, res) => {
 const InsertBank = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "Insert into Bank(BankName,Address) values('"+req.body.BankName+"','"+req.body.Address+"');";
+		var query = "Insert into Bank(BankName,Address,BranchCode) values('"+req.body.BankName+"','"+req.body.Address+"','"+req.body.BranchCode+"');";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -71,7 +71,7 @@ const InsertBank = async (req, res) => {
 const UpdateBank = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "Update Bank set BankName = '"+req.body.BankName+"', Address = '"+req.body.Address+"' where Id='"+req.params.Id+"' ;";
+		var query = "Update Bank set BankName = '"+req.body.BankName+"', Address = '"+req.body.Address+"',BranchCode='"+req.body.BranchCode+"' where Id='"+req.params.Id+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

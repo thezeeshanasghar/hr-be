@@ -49,7 +49,7 @@ const GetCompanyById = async (req, res) => {
 const InsertCompany = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "Insert into Company(Code, CompanyName, Address, Contact, CompanyAccount, Email, Country) values('"+req.body.Code+"','"+req.body.CompanyName+"','"+req.body.Address+"','"+req.body.Contact+"','"+req.body.CompanyAccount+"','"+req.body.Email+"','"+req.body.Country+"');";
+		var query = "Insert into Company(Code, CompanyName, Address, Contact, Email, CountryCode) values('"+req.body.Code+"','"+req.body.CompanyName+"','"+req.body.Address+"','"+req.body.Contact+"','"+req.body.Email+"','"+req.body.Country+"');";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -71,7 +71,7 @@ const InsertCompany = async (req, res) => {
 const UpdateCompany = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "update  Company set Code = '"+req.body.Code+"',CompanyName = '"+req.body.CompanyName+"',Address = '"+req.body.Address+"',Contact = '"+req.body.Contact+"',CompanyAccount = '"+req.body.CompanyAccount+"',Email = '"+req.body.Email+"',Country = '"+req.body.Country+"' where Id = '"+req.params.Id+"' ;";
+		var query = "update  Company set Code = '"+req.body.Code+"',CompanyName = '"+req.body.CompanyName+"',Address = '"+req.body.Address+"',Contact = '"+req.body.Contact+"',Email = '"+req.body.Email+"',CountryCode = '"+req.body.CountryCode+"' where Id = '"+req.params.Id+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
