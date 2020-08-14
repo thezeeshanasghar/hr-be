@@ -4,7 +4,9 @@ const { poolPromise } = require('../config/db');
 
 const GetAllunpaidLeaves = async (req, res) => {
 	try {
-		var query = "select * from  unpaidLeaves ;";
+		var query = `select unpaidLeaves.Id, employee.FirstName,company.CompanyName,unpaidLeaves.CompanyId, unpaidLeaves.EmployeeId, unpaidLeaves.LeaveStartDate, unpaidLeaves.LeaveEndDate from  unpaidLeaves 
+					 inner join [dbo].[Company] company on unpaidLeaves.CompanyId=company.Id
+					 inner join [dbo].[Employees] employee on unpaidLeaves.EmployeeId=employee.Id ;`;
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

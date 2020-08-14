@@ -25,7 +25,7 @@ const GetEmployees = async (req, res) => {
 }
 const GetEmployeesByCompany = async (req, res) => {
 	try {
-		var query = "select * from  Employees where CompanyId = '"+req.body.CompanyId+"' ;";
+		var query = "select * from  Employees where CompanyId = '"+req.params.CompanyId+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

@@ -63,7 +63,7 @@ const SocialSecuritySecondaryPath=SocialSecuritydefaultPath+'/:Id';
 const SocialSecurityByCompany=SocialSecuritydefaultPath+'/ByCompany/:CompanyId';
 //#endregion
 //#region Unit
-const UnitdefaultPath='/SocialSecurity';
+const UnitdefaultPath='/unit';
 const UnitSecondaryPath=UnitdefaultPath+'/:Id';
 const UnitByCompany=UnitdefaultPath+'/ByCompany/:CompanyId';
 //#endregion
@@ -76,6 +76,10 @@ const UnpaidleavesByCompany=UnpaidleavesdefaultPath+'/ByCompany/:CompanyId';
 const userProtectiondefaultPath='/userProtection';
 const userProtectionSecondaryPath=userProtectiondefaultPath+'/:Id';
 const userProtectionByCompany=userProtectiondefaultPath+'/ByCompany/:CompanyId';
+//#endregion
+
+//#region 
+const LookupsSecondaryPath="/lookups/:Id";
 //#endregion
 const message={
 	"success":"Operation successfull",
@@ -91,4 +95,4 @@ module.exports={userloginPath,message,defaultPath,BankSecondaryPath,Companydefau
 				PayElementGLAccountSecondaryPath,PositiondefaultPath,PositionSecondaryPath,PositionByCompany,
 				SocialSecuritydefaultPath,SocialSecuritySecondaryPath,SocialSecurityByCompany,
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
-				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany};
+				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath};

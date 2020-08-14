@@ -15,6 +15,7 @@ const Security=require('./../controllers/SocialSecurity_Taxation_ElementControll
 const unit=require('./../controllers/UnitController');
 const unpaidleaves=require('./../controllers/unpaidLeavesController');
 const userProtection=require('./../controllers/UserProtectionController');
+const lookups=require('./../controllers/LookupsController');
 
 
 const routing=(app)=>{
@@ -34,7 +35,8 @@ app.use('/api', Position)
 app.use('/api', Security)  
 app.use('/api', unit)  
 app.use('/api', unpaidleaves)  
-app.use('/api', userProtection)  
+app.use('/api', userProtection) 
+app.use('/api',lookups); 
 
 }
 module.exports=routing;
