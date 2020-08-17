@@ -1,4 +1,6 @@
-const userloginPath='/userLogin/:userName/:userPassword';
+const userdefaultPath="/userLogin";
+const userloginPath=userdefaultPath+'/:userName/:userPassword';
+
 
 //#region  Bank
 const defaultPath='/Bank';
@@ -86,7 +88,7 @@ const message={
 	"error":"Operation Unsuccessfull",
 	"Autherror":"Invalid Credentials"
 }
-module.exports={userloginPath,message,defaultPath,BankSecondaryPath,CompanydefaultPath,CompanySecondaryPath,
+module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryPath,CompanydefaultPath,CompanySecondaryPath,
 				CostCenterdefaultPath,CostCenterSecondaryPath,CostCenterByCompany,ExchangedefaultPath,ExchangeSecondaryPath,
 				ExchangeByCurrency,BankAccdefaultPath,BankAccSecondaryPath,BankAccByCompany,EmployeedefaultPath,
 				EmployeeSecondaryPath,EmployeeByCompany,GLAccdefaultPath,GLAccSecondaryPath,GLAccByCompany,

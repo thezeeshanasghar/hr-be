@@ -29,4 +29,26 @@ const userlogin = async (req, res) => {
 		return "error";
 	}
 }
-module.exports = { userlogin };
+
+const getAllusers = async (req, res) => {
+	try {
+		var query = "select * from users ;";
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var response = profileset.recordset;
+					res.send(response);
+					return ;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
+module.exports = { userlogin,getAllusers };
