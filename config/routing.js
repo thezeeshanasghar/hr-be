@@ -16,6 +16,7 @@ const unit=require('./../controllers/UnitController');
 const unpaidleaves=require('./../controllers/unpaidLeavesController');
 const userProtection=require('./../controllers/UserProtectionController');
 const lookups=require('./../controllers/LookupsController');
+const countryLaw=require('./../controllers/countryLawController');
 
 
 const routing=(app)=>{
@@ -37,6 +38,6 @@ app.use('/api', unit)
 app.use('/api', unpaidleaves)  
 app.use('/api', userProtection) 
 app.use('/api',lookups); 
-
+app.use('/api',countryLaw);
 }
 module.exports=routing;

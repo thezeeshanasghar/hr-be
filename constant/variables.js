@@ -83,6 +83,13 @@ const userProtectionByCompany=userProtectiondefaultPath+'/ByCompany/:CompanyId';
 //#region 
 const LookupsSecondaryPath="/lookups/:Id";
 //#endregion
+
+//#region 
+const CountryLawdefaultPath='/countrylaw';
+const CountryLawSecondaryPath='/countrylaw/:Id';
+//#endregion
+
+
 const message={
 	"success":"Operation successfull",
 	"error":"Operation Unsuccessfull",
@@ -97,4 +104,5 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				PayElementGLAccountSecondaryPath,PositiondefaultPath,PositionSecondaryPath,PositionByCompany,
 				SocialSecuritydefaultPath,SocialSecuritySecondaryPath,SocialSecurityByCompany,
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
-				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath};
+				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath,
+				CountryLawdefaultPath,CountryLawSecondaryPath};

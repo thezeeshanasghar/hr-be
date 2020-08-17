@@ -2,12 +2,9 @@
 const { message } = require('../constant/variables');
 const { poolPromise } = require('../config/db');
 
-const GetAllCurrencyExchange = async (req, res) => {
+const GetAllCountryLaw = async (req, res) => {
 	try {
-		var query = `select
-		(select Name from [myuser].[LookupItems] where Id=CurrencyExchange.Currency) as CurrencyName  ,
-		(select Name from [myuser].[LookupItems] where Id=CurrencyExchange.ToCurrency) as ToCurrencyName ,
-		* from  CurrencyExchange;`;
+		var query = "select * from  CountryLaws ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -27,32 +24,9 @@ const GetAllCurrencyExchange = async (req, res) => {
 	}
 }
 
-const GetCurrencyExchangeByCurrency = async (req, res) => {
+const GetCountryLawById = async (req, res) => {
 	try {
-		
-		var query = "select * from  CurrencyExchange where Currency = '"+req.params.Currency+"' and ToCurrency = '"+req.params.ToCurrency+"' ;";
-		const pool = await poolPromise
-		const result = await pool.request()
-			.query(query, function (err, profileset) {
-				if (err) {
-					console.log(err)
-				}
-				else {
-					var response = profileset.recordset;
-					res.send(response);
-					return ;
-				}
-			})
-	} catch (err) {
-		res.status(500)
-		res.send(message.error)
-		return "error";
-	}
-}
-const GetCurrencyExchangeById = async (req, res) => {
-	
-	try {
-		var query = "select * from CurrencyExchange where Id='"+req.params.Id+"' ;";
+		var query = "select * from CountryLaws where Id='"+req.params.Id+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -72,10 +46,10 @@ const GetCurrencyExchangeById = async (req, res) => {
 	}
 }
 
-const InsertCurrencyExchange = async (req, res) => {
+const InsertCountryLaw= async (req, res) => {
 	try {
 		console.log(res);
-		var query = "Insert into CurrencyExchange(Currency, Rate, ToCurrency, EffectiveDate) values('"+req.body.Currency+"','"+req.body.Rate+"','"+req.body.ToCurrency+"','"+req.body.EffectiveDate+"');";
+		var query = "Insert into CountryLaws( Detail, CountryCode, Currency, StartDate, AdultAge, CalculationMode) values('"+req.body.Detail+"','"+req.body.CountryCode+"','"+req.body.Currency+"',getdate(),'"+req.body.AdultAge+"','"+req.body.CalculationMode+"' );";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -94,10 +68,10 @@ const InsertCurrencyExchange = async (req, res) => {
 		return "error";
 	}
 }
-const UpdateCurrencyExchage = async (req, res) => {
+const UpdateCountryLaw = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "update  CurrencyExchange set Currency = '"+req.body.Currency+"',Rate = '"+req.body.Rate+"',ToCurrency = '"+req.body.ToCurrency+"',EffectiveDate = '"+req.body.EffectiveDate+"' where Id = '"+req.params.Id+"' ;";
+		var query = "update  CountryLaws set Detail = '"+req.body.Detail+"', CountryCode = '"+req.body.CountryCode+"', Currency = '"+req.body.Currency+"', AdultAge = '"+req.body.AdultAge+"', CalculationMode='"+req.body.CalculationMode+"' where Id = '"+req.params.Id+"'  ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -116,10 +90,10 @@ const UpdateCurrencyExchage = async (req, res) => {
 		return "error";
 	}
 }
-const DeleteCurrencyExchange = async (req, res) => {
+const DeleteCountryLaw = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from CurrencyExchange where Id='"+req.params.Id+"' ;";
+		var query = "delete from CountryLaws where Id='"+req.params.Id+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -138,6 +112,4 @@ const DeleteCurrencyExchange = async (req, res) => {
 		return "error";
 	}
 }
-
-module.exports = { GetAllCurrencyExchange,GetCurrencyExchangeByCurrency,GetCurrencyExchangeById,
-				   InsertCurrencyExchange,UpdateCurrencyExchage,DeleteCurrencyExchange};
+module.exports = { GetAllCountryLaw,GetCountryLawById,InsertCountryLaw,UpdateCountryLaw,DeleteCountryLaw};
