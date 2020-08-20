@@ -27,7 +27,7 @@ const GetAllUnit = async (req, res) => {
 const GetUnitByCompany = async (req, res) => {
 	try {
 		
-		var query = "select * from  Unit where CompanyId = '"+req.params.Id+"' ;";
+		var query = "select * from  Unit where CompanyId = '"+req.params.CompanyId+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

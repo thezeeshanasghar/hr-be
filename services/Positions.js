@@ -27,7 +27,7 @@ const GetAllPositions = async (req, res) => {
 const GetPositionsByCompany = async (req, res) => {
 	try {
 		
-		var query = "select * from  Positions where CompanyId = '"+req.params.Id+"' ;";
+		var query = "select * from  Positions where CompanyId = '"+req.params.CompanyId+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

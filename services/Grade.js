@@ -27,7 +27,7 @@ const GetAllGrades = async (req, res) => {
 const GetGradeByCompany = async (req, res) => {
 	try {
 		
-		var query = "select * from  Grade where CompanyId = '"+req.params.Id+"' ;";
+		var query = "select * from  Grade where CompanyId = '"+req.params.CompanyId+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
