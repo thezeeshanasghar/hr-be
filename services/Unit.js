@@ -72,7 +72,7 @@ const GetUnitById = async (req, res) => {
 const InsertUnit = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "Insert into Unit(CompanyId, Code) values('"+req.body.CompanyId+"','"+req.body.Code+"');";
+		var query = "Insert into Unit(CompanyId, Code,Name) values('"+req.body.CompanyId+"','"+req.body.Code+"','"+req.body.Name+"');";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -94,7 +94,7 @@ const InsertUnit = async (req, res) => {
 const UpdateUnit = async (req, res) => {
 	try {
 		
-		var query = "update  Unit set CompanyId = '"+req.body.CompanyId+"',Code = '"+req.body.Code+"' where Id = '"+req.params.Id+"' ;";
+		var query = "update  Unit set CompanyId = '"+req.body.CompanyId+"',Code = '"+req.body.Code+"',Name = '"+req.body.Name+"'  where Id = '"+req.params.Id+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
