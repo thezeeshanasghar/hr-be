@@ -49,7 +49,7 @@ const GetCountryLawById = async (req, res) => {
 const InsertCountryLaw= async (req, res) => {
 	try {
 		console.log(res);
-		var query = "Insert into CountryLaws( Detail, CountryCode, Currency, StartDate, AdultAge, CalculationMode) values('"+req.body.Detail+"','"+req.body.CountryCode+"','"+req.body.Currency+"',getdate(),'"+req.body.AdultAge+"','"+req.body.CalculationMode+"' );";
+		var query = "Insert into CountryLaws( Detail, CountryCode, Currency, StartDate, AdultAge, CalculationMode,MaxSalary, MinSalary, Percentage, Type) values('"+req.body.Detail+"','"+req.body.CountryCode+"','"+req.body.Currency+"',getdate(),'"+req.body.AdultAge+"','"+req.body.CalculationMode+"','"+req.body.MaxSalary+"','"+req.body.MinSalary+"','"+req.body.Percentage+"','"+req.body.Type +"' );";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -71,7 +71,7 @@ const InsertCountryLaw= async (req, res) => {
 const UpdateCountryLaw = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "update  CountryLaws set Detail = '"+req.body.Detail+"', CountryCode = '"+req.body.CountryCode+"', Currency = '"+req.body.Currency+"', AdultAge = '"+req.body.AdultAge+"', CalculationMode='"+req.body.CalculationMode+"' where Id = '"+req.params.Id+"'  ;";
+		var query = "update  CountryLaws set Detail = '"+req.body.Detail+"', CountryCode = '"+req.body.CountryCode+"', Currency = '"+req.body.Currency+"', AdultAge = '"+req.body.AdultAge+"', CalculationMode='"+req.body.CalculationMode+"' , MaxSalary='"+req.body.MaxSalary+"' , MinSalary='"+req.body.MinSalary+"' , Percentage = '"+req.body.Percentage+"' , Type = '"+req.body.Type +"' where Id = '"+req.params.Id+"'  ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
