@@ -23,9 +23,9 @@
 			return "error";
 		}
 	}
-	const GeEmployeesBankAccountByCompany = async (req, res) => {
+	const GeEmployeesBankAccountByEmployee = async (req, res) => {
 		try {
-			var query = "select * from  EmployeeBankAccount where CompanyId = '"+req.params.CompanyId+"' ;";
+			var query = "select * from  EmployeeBankAccount where EmployeeId = '"+req.params.EmployeeId+"' ;";
 			const pool = await poolPromise
 			const result = await pool.request()
 				.query(query, function (err, profileset) {
@@ -136,5 +136,5 @@
 		}
 	}
 
-	module.exports = { GeEmployeesBankAccount,GeEmployeesBankAccountByCompany,GetEmployeeBankAccountById,
+	module.exports = { GeEmployeesBankAccount,GeEmployeesBankAccountByEmployee,GetEmployeeBankAccountById,
 		InsertEmployeeBankAccount,UpdateEmployeeBankAccount,DeleteEmployeeBankAccount};

@@ -27,7 +27,7 @@ const GetAllPayElement = async (req, res) => {
 const GetPayElementByCompany = async (req, res) => {
 	try {
 		
-		var query = "select * from  PayElement where CompanyId = '"+req.params.Id+"' ;";
+		var query = "select * from  PayElement where CompanyId = '"+req.params.CompanyId+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

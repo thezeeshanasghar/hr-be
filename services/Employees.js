@@ -1,6 +1,7 @@
 
 const { message } = require('../constant/variables');
-const { poolPromise } = require('../config/db');
+const {sql, poolPromise } = require('../config/db');
+// const { sql } = require('mssql');
 
 const GetEmployees = async (req, res) => {
 	try {
@@ -45,11 +46,33 @@ const GetEmployeesByCompany = async (req, res) => {
 	}
 }
 
+const GetEmployeePayRoll = async (req, res) => {
+	
+	try {
+		var query = "select * from [myuser].[EmployeePayRoll] where [EmployeeId]='"+req.params.EmployeeId+"' ;";
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var response = profileset.recordset;
+					res.send(response);
+					return ;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
 
 const GetEmployeeById = async (req, res) => {
 	
 	try {
-		var query = "select * from Employees where Id='"+req.body.Id+"' ;";
+		var query = "select * from Employees where Id='"+req.params.Id+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -70,37 +93,55 @@ const GetEmployeeById = async (req, res) => {
 }
 
 const InsertEmployee = async (req, res) => {
-	try {
-		var query = "insert into Employees( CompanyId, EmployeeCode, InsuranceId, TaxationId, Cnic, Title, FirstName,"
-					+"middleName, FamilyName, Gender, MaritalStatus, DOB, CountryofBirth, Email, BaseCountry, ContractType,"
-					+"CurrentEmployeeStatus, HireDate, HiringReason, ServiceStartDate, ProbationEndDate, PartTimeSituation,"
-					+" PartTimePercentage, ContractEndDate, UnitId, JobId, PositionId, GradeId, CurrencyCode, SalaryStatus,"
-					+" Paymethod, ApplicableSocialSecurityId, ApplicableTaxationId)"
-					+"values('"+req.body.CompanyId+"', '"+req.body.EmployeeCode+"', '"+req.body.InsuranceId+"', '"+req.body.TaxationId+"',"
-					+"'"+req.body.Cnic+"', '"+req.body.Title+"', '"+req.body.FirstName+"', '"+req.body.middleName+"', '"+req.body.FamilyName+"',"
-					+"'"+req.body.Gender+"', '"+req.body.MaritalStatus+"', '"+req.body.DOB+"', '"+req.body.CountryofBirth+"', '"+req.body.Email+"',"
-					+" '"+req.body.BaseCountry+"', '"+req.body.ContractType+"', '"+req.body.CurrentEmployeeStatus+"', '"+req.body.HireDate+"',"
-					+" '"+req.body.HiringReason+"', '"+req.body.ServiceStartDate+"', '"+req.body.ProbationEndDate+"', '"+req.body.PartTimeSituation+"',"
-					+" '"+req.body.PartTimePercentage+"', '"+req.body.ContractEndDate+"', '"+req.body.UnitId+"', '"+req.body.JobId+"', '"+req.body.PositionId+"',"
-					+" '"+req.body.GradeId+"', '"+req.body.CurrencyCode+"', '"+req.body.SalaryStatus+"', '"+req.body.Paymethod+"', '"+req.body.ApplicableSocialSecurityId+"',"
-					+" '"+req.body.ApplicableTaxationId+"')";
-		const pool = await poolPromise
+console.log(req.body.Address,"Address");
+console.log(req.body.BankId,"Bank");
+
+	try {  
+		const pool = await poolPromise  
 		const result = await pool.request()
-			.query(query, function (err, profileset) {
-				if (err) {
-					console.log(err)
-				}
-				else {
-					var response = profileset.recordset;
-					res.send(response);
-					return ;
-				}
-			})
-	} catch (err) {
-		res.status(500)
-		res.send(message.error)
-		return "error";
-	}
+		.input("Title", sql.BIGINT,req.body.Title)  
+		.input("Address", sql.VarChar(300),req.body.Address)  
+		.input("BankId", sql.BIGINT,req.body.BankId)  
+		.input("Cnic", sql.VarChar(500),req.body.Cnic)  
+		.input("CompanyId", sql.BIGINT,req.body.CompanyId)
+		.input("Contact", sql.VarChar(300),req.body.Contact) 
+		.input("ContractEndDate", sql.VarChar(20),req.body.ContractEndDate)  
+		.input("ContractType", sql.BIGINT,req.body.ContractType)  
+		.input("Country", sql.BIGINT,req.body.Country)  
+		.input("CurrencyCode", sql.BIGINT,req.body.CurrencyCode)  
+		.input("CurrentEmployeeStatus", sql.BIGINT,req.body.CurrentEmployeeStatus)  
+		.input("DOB", sql.VarChar(20),req.body.DOB) 
+		.input("EffectiveDate", sql.VarChar(20),req.body.EffectiveDate)  
+		.input("Email", sql.VarChar(300),req.body.Email)
+		.input("EmployeeCode", sql.VarChar(500),req.body.EmployeeCode)   
+		.input("FirstName", sql.VarChar(500),req.body.FirstName)  
+		.input("Gender", sql.BIGINT,req.body.Gender) 
+		.input("GradeId", sql.BIGINT,req.body.GradeId)  
+		.input("HireDate", sql.VarChar(20),req.body.HireDate)  
+		.input("HiringReason", sql.VarChar(500),req.body.HiringReason) 
+		.input("IBAN", sql.BIGINT,req.body.IBAN)  
+		.input("InsuranceId", sql.VarChar(500),req.body.InsuranceId)  
+		.input("IsPrimary", sql.BIGINT,req.body.IsPrimary)  
+		.input("LastName", sql.VarChar(500),req.body.LastName)  
+		.input("MaritalStatus", sql.BIGINT,req.body.MaritalStatus)  
+		.input("PartTimePercentage", sql.Decimal(18,2),req.body.PartTimePercentage)  
+		.input("PartTimeSituation", sql.BIGINT,req.body.PartTimeSituation)  
+		.input("Paymethod", sql.BIGINT,req.body.Paymethod) 
+		.input("PositionId", sql.BIGINT,req.body.PositionId) 
+		.input("PayRollDetail", sql.NVARCHAR(4000),req.body.PayRollDetail)
+		.input("TaxationId", sql.BIGINT,req.body.TaxationId)  
+		.input("ServiceStartDate", sql.VarChar(20),req.body.ServiceStartDate)  
+		.input("ProbationEndDate", sql.VarChar(20),req.body.ProbationEndDate)
+		.input("SalaryStatus", sql.BIGINT,req.body.SalaryStatus)  
+		.execute("[dbo].[InsertEmployee]").then(function (recordSet) { 
+		 res.status(200).json({ status: "Success" })  ;
+		//  return ;
+		})  
+		} catch (err) {  
+		res.status(400).json({ message:err.message})  
+		res.send(err.message)  
+		// return "error";
+		} 
 }
 const UpdateEmployee = async (req, res) => {
 	try {
@@ -130,7 +171,8 @@ const UpdateEmployee = async (req, res) => {
 const DeleteEmployee = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from Employee where Id='"+req.params.Id+"' ;";
+		var query =" delete from [dbo].[Employees] where Id='"+req.params.Id+"' ;"
+		 
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -151,4 +193,4 @@ const DeleteEmployee = async (req, res) => {
 }
 
 module.exports = { GetEmployees,GetEmployeesByCompany,GetEmployeeById,
-	InsertEmployee,UpdateEmployee,DeleteEmployee};
+	InsertEmployee,UpdateEmployee,DeleteEmployee,GetEmployeePayRoll};

@@ -22,12 +22,13 @@ const ExchangeByCurrency=ExchangedefaultPath+'/:Currency/:ToCurrency';
 //#region EmployeeBankAccount
 const BankAccdefaultPath='/BankAccount';
 const BankAccSecondaryPath=BankAccdefaultPath+'/:Id';
-const BankAccByCompany=BankAccdefaultPath+'/ByCompany/:CompanyId';
+const BankAccByEmployee=BankAccdefaultPath+'/ByEmployee/:EmployeeId';
 //#endregion
 //#region Employees
-const EmployeedefaultPath='/Employees';
+const EmployeedefaultPath='/Employee';
 const EmployeeSecondaryPath=EmployeedefaultPath+'/:Id';
 const EmployeeByCompany=EmployeedefaultPath+'/ByCompany/:CompanyId';
+const EmployeePayroll=EmployeedefaultPath+'/PayRoll/:EmployeeId';
 //#endregion
 
 //#region GLAccount
@@ -97,8 +98,8 @@ const message={
 }
 module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryPath,CompanydefaultPath,CompanySecondaryPath,
 				CostCenterdefaultPath,CostCenterSecondaryPath,CostCenterByCompany,ExchangedefaultPath,ExchangeSecondaryPath,
-				ExchangeByCurrency,BankAccdefaultPath,BankAccSecondaryPath,BankAccByCompany,EmployeedefaultPath,
-				EmployeeSecondaryPath,EmployeeByCompany,GLAccdefaultPath,GLAccSecondaryPath,GLAccByCompany,
+				ExchangeByCurrency,BankAccdefaultPath,BankAccSecondaryPath,BankAccByEmployee,EmployeedefaultPath,
+				EmployeeSecondaryPath,EmployeeByCompany,EmployeePayroll,GLAccdefaultPath,GLAccSecondaryPath,GLAccByCompany,
 				GradesdefaultPath,GradesSecondaryPath,GradesByCompany,JobdefaultPath,JobSecondaryPath,JobByCompany,
 				PayElementdefaultPath,PayElementSecondaryPath,PayElementByCompany,PayElementGLAccountdefaultPath,
 				PayElementGLAccountSecondaryPath,PositiondefaultPath,PositionSecondaryPath,PositionByCompany,
