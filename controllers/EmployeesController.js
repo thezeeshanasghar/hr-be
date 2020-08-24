@@ -1,10 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const sql = require('mssql')
-const { EmployeePayroll,EmployeeByCompany,EmployeeSecondaryPath,EmployeedefaultPath} = require('./../constant/variables')
-const {GetEmployeePayRoll,GetEmployees,GetEmployeeById,InsertEmployee,UpdateEmployee,DeleteEmployee,GetEmployeesByCompany} = require('./../services/Employees')
+const {EmployeeApplcableLaws, EmployeePayroll,EmployeeByCompany,EmployeeSecondaryPath,EmployeedefaultPath} = require('./../constant/variables')
+const {getEmployeeApplcableLaws,GetEmployeePayRoll,GetEmployees,GetEmployeeById,InsertEmployee,UpdateEmployee,DeleteEmployee,GetEmployeesByCompany} = require('./../services/Employees')
 router.get(EmployeedefaultPath, async (req, res) => {
 	GetEmployees(req, res);
+});
+router.get(EmployeeApplcableLaws, async (req, res) => {
+	getEmployeeApplcableLaws(req, res);
 });
 router.get(EmployeeByCompany, async (req, res) => {
 	GetEmployeesByCompany(req, res);

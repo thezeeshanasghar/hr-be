@@ -29,6 +29,7 @@ const EmployeedefaultPath='/Employee';
 const EmployeeSecondaryPath=EmployeedefaultPath+'/:Id';
 const EmployeeByCompany=EmployeedefaultPath+'/ByCompany/:CompanyId';
 const EmployeePayroll=EmployeedefaultPath+'/PayRoll/:EmployeeId';
+const EmployeeApplcableLaws=EmployeedefaultPath+'/ApplicableLaw/:EmployeeId';
 //#endregion
 
 //#region GLAccount
@@ -99,7 +100,7 @@ const message={
 module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryPath,CompanydefaultPath,CompanySecondaryPath,
 				CostCenterdefaultPath,CostCenterSecondaryPath,CostCenterByCompany,ExchangedefaultPath,ExchangeSecondaryPath,
 				ExchangeByCurrency,BankAccdefaultPath,BankAccSecondaryPath,BankAccByEmployee,EmployeedefaultPath,
-				EmployeeSecondaryPath,EmployeeByCompany,EmployeePayroll,GLAccdefaultPath,GLAccSecondaryPath,GLAccByCompany,
+				EmployeeSecondaryPath,EmployeeByCompany,EmployeePayroll,EmployeeApplcableLaws,GLAccdefaultPath,GLAccSecondaryPath,GLAccByCompany,
 				GradesdefaultPath,GradesSecondaryPath,GradesByCompany,JobdefaultPath,JobSecondaryPath,JobByCompany,
 				PayElementdefaultPath,PayElementSecondaryPath,PayElementByCompany,PayElementGLAccountdefaultPath,
 				PayElementGLAccountSecondaryPath,PositiondefaultPath,PositionSecondaryPath,PositionByCompany,
