@@ -86,9 +86,12 @@ const userProtectionByCompany=userProtectiondefaultPath+'/ByCompany/:CompanyId';
 const LookupsSecondaryPath="/lookups/:Id";
 //#endregion
 
-//#region 
+//#region country Law
 const CountryLawdefaultPath='/countrylaw';
 const CountryLawSecondaryPath='/countrylaw/:Id';
+//#endregion
+//#region 
+const PaySlipDefaultPath='/payslip';
 //#endregion
 
 
@@ -107,4 +110,4 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				SocialSecuritydefaultPath,SocialSecuritySecondaryPath,SocialSecurityByCompany,
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
 				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath,
-				CountryLawdefaultPath,CountryLawSecondaryPath};
+				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath};

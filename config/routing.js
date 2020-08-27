@@ -17,6 +17,7 @@ const unpaidleaves=require('./../controllers/unpaidLeavesController');
 const userProtection=require('./../controllers/UserProtectionController');
 const lookups=require('./../controllers/LookupsController');
 const countryLaw=require('./../controllers/countryLawController');
+const payrollslip=require('./../controllers/PayRollSlipController');
 
 
 const routing=(app)=>{
@@ -39,5 +40,7 @@ app.use('/api', unpaidleaves)
 app.use('/api', userProtection) 
 app.use('/api',lookups); 
 app.use('/api',countryLaw);
+app.use('/api',payrollslip);
+
 }
 module.exports=routing;
