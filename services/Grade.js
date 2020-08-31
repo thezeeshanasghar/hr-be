@@ -4,7 +4,8 @@ const { poolPromise } = require('../config/db');
 
 const GetAllGrades = async (req, res) => {
 	try {
-		var query = "select * from  Grade ;";
+		var query = `select [dbo].[Grade].*,[dbo].[Company].CompanyName from [dbo].[Grade] inner join
+		[dbo].[Company] on [dbo].[Company].Id = CompanyId ;`;
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
