@@ -12,7 +12,7 @@ const GetAllBanks = async (req, res) => {
 					console.log(err)
 				}
 				else {
-					var response = profileset.recordset;
+					var response ={data : profileset.recordset};
 					res.send(response);
 					return ;
 				}
@@ -93,7 +93,7 @@ const UpdateBank = async (req, res) => {
 const DeleteBank = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from Bank where Id='"+req.params.Id+"' ;";
+		var query = "delete from Bank where Id in ("+req.params.Id +") ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

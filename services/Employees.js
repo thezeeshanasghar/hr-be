@@ -5,7 +5,15 @@ const {sql, poolPromise } = require('../config/db');
 
 const GetEmployees = async (req, res) => {
 	try {
-		var query = "select * from  Employees ;";
+		var query = `select 
+		Id, CompanyId, EmployeeCode, InsuranceId, TaxationId, Cnic, FirstName, 
+		LastName, format(DOB,'dd/MM/yyyy') as DOB , format(HireDate,'dd/MM/yyyy') as HireDate ,
+		 HiringReason, format(ServiceStartDate,'dd/MM/yyyy') as ServiceStartDate ,
+		format(ProbationEndDate,'dd/MM/yyyy') as ProbationEndDate,PartTimePercentage,format(ContractEndDate,'dd/MM/yyyy'),
+		PositionId, GradeId, Address, Contact,Gender, MaritalStatus, ContractType, Country,
+		CurrentEmployeeStatus,PartTimeSituation, Title, Email
+		from 
+		[dbo].[Employees]`;
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -13,7 +21,7 @@ const GetEmployees = async (req, res) => {
 					console.log(err)
 				}
 				else {
-					var response = profileset.recordset;
+					var response = {data:profileset.recordset};
 					res.send(response);
 					return ;
 				}
@@ -216,7 +224,7 @@ const UpdateEmployee = async (req, res) => {
 const DeleteEmployee = async (req, res) => {
 	try {
 		console.log(res);
-		var query =" delete from [dbo].[Employees] where Id='"+req.params.Id+"' ;"
+		var query =" delete from [dbo].[Employees] where Id in ("+req.params.Id+") ;"
 		 
 		const pool = await poolPromise
 		const result = await pool.request()

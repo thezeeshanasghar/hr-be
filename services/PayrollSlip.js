@@ -23,6 +23,32 @@ const GeneratePayroll = async (req, res) => {
 		// return "error";
 		} 
 }
+const GetPayRollSlip=async (req,res)=>{
+	try {
+		console.log(res);
+		var query = `
+		select payroll.*,emp.FirstName from [myuser].[SalaryPayRoll] payroll inner join
+		[dbo].[Employees] emp on emp.Id=payroll.EmployeeId
+		order by payroll.CompanyId`;
+
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var response = {data:profileset.recordset};
+					res.send(response);
+					return ;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
 
 
-module.exports = { GeneratePayroll};
+module.exports = { GeneratePayroll,GetPayRollSlip};

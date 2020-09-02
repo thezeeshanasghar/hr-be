@@ -4,7 +4,7 @@ const { poolPromise } = require('../config/db');
 
 const GetAllCountryLaw = async (req, res) => {
 	try {
-		var query = "select * from  CountryLaws ;";
+		var query = "select Id, Detail, CountryCode, Currency, format(StartDate,'dd/MM/yyyy') as StartDate , format(EndDate,'dd/MM/yyyy') as EndDate, AdultAge, CalculationMode, MaxSalary, MinSalary, Percentage, Type from  CountryLaws ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -12,7 +12,7 @@ const GetAllCountryLaw = async (req, res) => {
 					console.log(err)
 				}
 				else {
-					var response = profileset.recordset;
+					var response = {data:profileset.recordset};
 					res.send(response);
 					return ;
 				}
@@ -93,7 +93,7 @@ const UpdateCountryLaw = async (req, res) => {
 const DeleteCountryLaw = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from CountryLaws where Id='"+req.params.Id+"' ;";
+		var query = "delete from CountryLaws where Id in ("+req.params.Id+") ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

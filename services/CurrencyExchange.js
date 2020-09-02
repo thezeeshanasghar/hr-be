@@ -7,7 +7,7 @@ const GetAllCurrencyExchange = async (req, res) => {
 		var query = `select
 		(select Name from [myuser].[LookupItems] where Id=CurrencyExchange.Currency) as CurrencyName  ,
 		(select Name from [myuser].[LookupItems] where Id=CurrencyExchange.ToCurrency) as ToCurrencyName ,
-		* from  CurrencyExchange;`;
+		Id, Currency, Rate, ToCurrency,format(EffectiveDate,'dd/MM/yyyy') as EffectiveDate from  CurrencyExchange;`;
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -15,7 +15,7 @@ const GetAllCurrencyExchange = async (req, res) => {
 					console.log(err)
 				}
 				else {
-					var response = profileset.recordset;
+					var response = {data:profileset.recordset};
 					res.send(response);
 					return ;
 				}
@@ -119,7 +119,7 @@ const UpdateCurrencyExchage = async (req, res) => {
 const DeleteCurrencyExchange = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from CurrencyExchange where Id='"+req.params.Id+"' ;";
+		var query = "delete from CurrencyExchange where Id in ("+req.params.Id+") ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
