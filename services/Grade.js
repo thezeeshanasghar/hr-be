@@ -4,7 +4,7 @@ const { poolPromise } = require('../config/db');
 
 const GetAllGrades = async (req, res) => {
 	try {
-		var query = `select [dbo].[Grade].*,[dbo].[Company].CompanyName from [dbo].[Grade] inner join
+		var query = `select [dbo].[Grade].*,[dbo].[Company].CompanyName as Company from [dbo].[Grade] inner join
 		[dbo].[Company] on [dbo].[Company].Id = CompanyId ;`;
 		const pool = await poolPromise
 		const result = await pool.request()
@@ -116,8 +116,9 @@ const UpdateGrade = async (req, res) => {
 }
 const DeleteGrade= async (req, res) => {
 	try {
-		console.log(res);
-		var query = "delete from Grade where Id='"+req.params.Id+"' ;";
+		console.log(req.params.Id);
+		var query = "delete from Grade where Id in ("+req.params.Id+") ;";
+		console.log(query);
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
