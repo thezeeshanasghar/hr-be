@@ -18,6 +18,7 @@ const userProtection=require('./../controllers/UserProtectionController');
 const lookups=require('./../controllers/LookupsController');
 const countryLaw=require('./../controllers/countryLawController');
 const payrollslip=require('./../controllers/PayRollSlipController');
+const report=require('./../controllers/reportController');
 
 
 const routing=(app)=>{
@@ -41,6 +42,6 @@ app.use('/api', userProtection)
 app.use('/api',lookups); 
 app.use('/api',countryLaw);
 app.use('/api',payrollslip);
-
+app.use('/api', report);
 }
 module.exports=routing;

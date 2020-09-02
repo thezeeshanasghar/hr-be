@@ -4,7 +4,7 @@ const { poolPromise } = require('../config/db');
 
 const GetAllunpaidLeaves = async (req, res) => {
 	try {
-		var query = `select unpaidLeaves.Id, employee.FirstName,company.CompanyName,unpaidLeaves.CompanyId, unpaidLeaves.EmployeeId, unpaidLeaves.LeaveStartDate, unpaidLeaves.LeaveEndDate from  unpaidLeaves 
+		var query = `select unpaidLeaves.Id, employee.FirstName,company.CompanyName,unpaidLeaves.CompanyId, unpaidLeaves.EmployeeId, format(unpaidLeaves.LeaveStartDate,'dd/MM/yyyy') as LeaveStartDate , format(unpaidLeaves.LeaveEndDate,'dd/MM/yyyy') as LeaveEndDate from  unpaidLeaves 
 					 inner join [dbo].[Company] company on unpaidLeaves.CompanyId=company.Id
 					 inner join [dbo].[Employees] employee on unpaidLeaves.EmployeeId=employee.Id ;`;
 		const pool = await poolPromise
@@ -14,7 +14,7 @@ const GetAllunpaidLeaves = async (req, res) => {
 					console.log(err)
 				}
 				else {
-					var response = profileset.recordset;
+					var response ={data:profileset.recordset};
 					res.send(response);
 					return ;
 				}
@@ -118,7 +118,7 @@ const UpdateunpaidLeaves = async (req, res) => {
 const DeleteunpaidLeaves= async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from unpaidLeaves where Id='"+req.params.Id+"' ;";
+		var query = "delete from unpaidLeaves where Id in ("+req.params.Id+") ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

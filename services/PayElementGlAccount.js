@@ -12,7 +12,7 @@ const GetAllPayElementGlAccount = async (req, res) => {
 					console.log(err)
 				}
 				else {
-					var response = profileset.recordset;
+					var response = {data:profileset.recordset};
 					res.send(response);
 					return ;
 				}
@@ -95,7 +95,7 @@ const UpdatePayElementGlAccount = async (req, res) => {
 const DeletePayElementGlAccount= async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from PayElementGlAccount where Id='"+req.params.Id+"' ;";
+		var query = "delete from PayElementGlAccount where Id in ("+req.params.Id+") ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

@@ -12,7 +12,7 @@ const GetAllPayElement = async (req, res) => {
 					console.log(err)
 				}
 				else {
-					var response = profileset.recordset;
+					var response = {data:profileset.recordset};
 					res.send(response);
 					return ;
 				}
@@ -35,7 +35,7 @@ const GetPayElementByCompany = async (req, res) => {
 					console.log(err)
 				}
 				else {
-					var response = profileset.recordset;
+					var response =profileset.recordset;
 					res.send(response);
 					return ;
 				}
@@ -117,7 +117,7 @@ const UpdatePayElement = async (req, res) => {
 const DeletePayElement= async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from PayElement where Id='"+req.params.Id+"' ;";
+		var query = "delete from PayElement where Id in ("+req.params.Id+") ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

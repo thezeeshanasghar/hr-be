@@ -12,7 +12,7 @@ const GetAllCostCenter = async (req, res) => {
 					console.log(err)
 				}
 				else {
-					var response = profileset.recordset;
+					var response = {data:profileset.recordset};
 					res.send(response);
 					return ;
 				}
@@ -114,7 +114,7 @@ const UpdateCostCenter = async (req, res) => {
 const DeleteCostCenter = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from CostCenter where Id='"+req.params.Id+"' ;";
+		var query = "delete from CostCenter where Id in ("+req.params.Id+") ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

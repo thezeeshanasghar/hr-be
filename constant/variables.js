@@ -93,7 +93,10 @@ const CountryLawSecondaryPath='/countrylaw/:Id';
 //#region 
 const PaySlipDefaultPath='/payslip';
 //#endregion
+//#region Reports
+const EmployeeReport='/Report/Employee'
 
+//#endregion 
 
 const message={
 	"success":"Operation successfull",
@@ -110,4 +113,4 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				SocialSecuritydefaultPath,SocialSecuritySecondaryPath,SocialSecurityByCompany,
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
 				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath,
-				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath};
+				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport};
