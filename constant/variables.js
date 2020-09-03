@@ -94,8 +94,8 @@ const CountryLawSecondaryPath='/countrylaw/:Id';
 const PaySlipDefaultPath='/payslip';
 //#endregion
 //#region Reports
-const EmployeeReport='/Report/Employee'
-
+const EmployeeReport='/Report/Employee';
+const EmployeepayrollReport='/Report/PayRoll';
 //#endregion 
 
 const message={
@@ -113,4 +113,4 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				SocialSecuritydefaultPath,SocialSecuritySecondaryPath,SocialSecurityByCompany,
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
 				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath,
-				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport};
+				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport};

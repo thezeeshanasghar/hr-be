@@ -51,6 +51,34 @@ const GetEmployeeReport = async (req, res) => {
 		return "error";
 	}
 }
+const GetEmployeePayrollReport = async (req, res) => {
+	try {
+		var query = `
+		select FirstName,
+		format(HireDate,'dd/MM/yyyy') as HireDate,
+		(SELECT SUM(value) from  [myuser].[EmployeePayRoll] where EmployeeId=emp.Id) as NetSalary,
+		payele.Description as PayElement,value
+		from [dbo].[Employees] emp inner join [myuser].[EmployeePayRoll] payroll on payroll.EmployeeId=emp.Id 
+		inner join
+	   [dbo].[PayElement] payele on payele.Id=payroll.PayelementId
+	   order by emp.Id`;
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var response = profileset.recordset;
+					res.send(response);
+					return ;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
 
-
-module.exports = { GetEmployeeReport};
+module.exports = { GetEmployeeReport,GetEmployeePayrollReport};
