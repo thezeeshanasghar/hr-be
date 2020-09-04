@@ -40,7 +40,7 @@ const GetEmployeeReport = async (req, res) => {
 					console.log(err)
 				}
 				else {
-					var response = profileset.recordset;
+					var response = {data:profileset.recordset};
 					res.send(response);
 					return ;
 				}
@@ -69,7 +69,32 @@ const GetEmployeePayrollReport = async (req, res) => {
 					console.log(err)
 				}
 				else {
-					var response = profileset.recordset;
+					var response = {data:profileset.recordset};
+					res.send(response);
+					return ;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
+const GetEmployeeVarrianceReport = async (req, res) => {
+	try {
+		var query = `select EmployeeCode,FirstName,HireDate,payelement.Code,paydetail.Paid,paydetail.DatefPayment as PayElement from [dbo].[Employees] emp inner join
+		[myuser].[EmployeePayRoll] payroll on emp.Id=payroll.EmployeeId inner join
+		[dbo].[PayElement] payelement on payelement.Id=payroll.PayelementId inner join
+		[myuser].[PaymentDetail] paydetail on paydetail.EmployeePayRollId =  payroll.Id
+		order by emp.Id`;
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var response = {data:profileset.recordset};
 					res.send(response);
 					return ;
 				}
@@ -81,4 +106,4 @@ const GetEmployeePayrollReport = async (req, res) => {
 	}
 }
 
-module.exports = { GetEmployeeReport,GetEmployeePayrollReport};
+module.exports = { GetEmployeeReport,GetEmployeePayrollReport,GetEmployeeVarrianceReport};

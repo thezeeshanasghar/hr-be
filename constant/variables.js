@@ -96,6 +96,7 @@ const PaySlipDefaultPath='/payslip';
 //#region Reports
 const EmployeeReport='/Report/Employee';
 const EmployeepayrollReport='/Report/PayRoll';
+const EmployeeVarrianceReport="/Report/Varriance"
 //#endregion 
 
 const message={
@@ -113,4 +114,4 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				SocialSecuritydefaultPath,SocialSecuritySecondaryPath,SocialSecurityByCompany,
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
 				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath,
-				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport};
+				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport};
