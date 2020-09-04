@@ -105,5 +105,4 @@ const GetEmployeeVarrianceReport = async (req, res) => {
 		return "error";
 	}
 }
-
 module.exports = { GetEmployeeReport,GetEmployeePayrollReport,GetEmployeeVarrianceReport};
