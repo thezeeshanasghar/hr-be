@@ -98,7 +98,9 @@ const EmployeeReport='/Report/Employee';
 const EmployeepayrollReport='/Report/PayRoll';
 const EmployeeVarrianceReport="/Report/Varriance"
 //#endregion 
-
+//#region BulkUpload
+const BulkUploadPath='/bulkupload';
+//#endregion
 const message={
 	"success":"Operation successfull",
 	"error":"Operation Unsuccessfull",
@@ -114,4 +116,5 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				SocialSecuritydefaultPath,SocialSecuritySecondaryPath,SocialSecurityByCompany,
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
 				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath,
-				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport};
+				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,
+				BulkUploadPath};
