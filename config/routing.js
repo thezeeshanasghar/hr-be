@@ -19,7 +19,7 @@ const lookups=require('./../controllers/LookupsController');
 const countryLaw=require('./../controllers/countryLawController');
 const payrollslip=require('./../controllers/PayRollSlipController');
 const report=require('./../controllers/reportController');
-
+const bulkUpload=require('./../controllers/BulkUploadController');
 
 const routing=(app)=>{
 app.use('/api', auth)  
@@ -43,5 +43,6 @@ app.use('/api',lookups);
 app.use('/api',countryLaw);
 app.use('/api',payrollslip);
 app.use('/api', report);
+app.use('/api',bulkUpload);
 }
 module.exports=routing;
