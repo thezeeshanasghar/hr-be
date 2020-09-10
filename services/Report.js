@@ -82,11 +82,15 @@ const GetEmployeePayrollReport = async (req, res) => {
 }
 const GetEmployeeVarrianceReport = async (req, res) => {
 	try {
-		var query = `select EmployeeCode,FirstName,HireDate,payelement.Code,paydetail.Paid,paydetail.DatefPayment as PayElement from [dbo].[Employees] emp inner join
+		var query = `
+		select * from (
+			select 	ROW_NUMBER()  OVER (Partition BY emp.Id
+            ORDER BY emp.Id DESC ) AS RANK, EmployeeCode,FirstName,format(HireDate,'dd/MM/yyyy') as HireDate,payelement.Code,paydetail.Paid,format(paydetail.DatefPayment,'dd/MM/yyyy') as DateofPayment from [dbo].[Employees] emp inner join
 		[myuser].[EmployeePayRoll] payroll on emp.Id=payroll.EmployeeId inner join
 		[dbo].[PayElement] payelement on payelement.Id=payroll.PayelementId inner join
 		[myuser].[PaymentDetail] paydetail on paydetail.EmployeePayRollId =  payroll.Id
-		order by emp.Id`;
+		) rs 
+		where RANK<3`;
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
