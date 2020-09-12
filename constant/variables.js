@@ -100,6 +100,7 @@ const EmployeeVarrianceReport="/Report/Varriance"
 //#endregion 
 //#region BulkUpload
 const BulkUploadPath='/bulkupload';
+const FileUpload='/Upload';
 //#endregion
 const message={
 	"success":"Operation successfull",
@@ -117,4 +118,4 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
 				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath,
 				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,
-				BulkUploadPath};
+				BulkUploadPath,FileUpload};

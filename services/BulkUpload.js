@@ -1,82 +1,111 @@
 var exceltojson = require("xlsx-to-json-lc");
 const { message } = require('../constant/variables');
+var fs = require('fs');
+var multer = require('multer');
+var path = require("path");
 
+const { poolPromise } = require('../config/db');
+const { type } = require("os");
 const BulkUpload = async (req, res) => {
 	try {
 		// var response = xlsxConvert();
 		exceltojson({
-			input:  "D://Multikart.xlsx",
+			input: req.body.Path,
 			output: "output.json",
 			// sheet: "Sheet1",  // specific sheetname inside excel file (if you have multiple sheets)
-			lowerCaseHeaders:true
-		  }, function(err, result) {
-			if(err) {
+			lowerCaseHeaders: true
+		}, function (err, result) {
+			if (err) {
 				return err;
 			} else {
-				
-				res.send(result);
+				SaveRecord(result, req.body.Type);
 			}
-		  });
-		return ;
+			res.send(result.length.toString());
+			res.status(200);
+			return;
+		});
+		return;
 	} catch (err) {
 		res.status(500)
-		res.send(message.error)
-	
+		res.send(err)
+		return;
 	}
 }
-module.exports = { BulkUpload };
 
+const fileUpload = async (req, res) => {
+	var date = Date.now();
+	var FilePath = "";
+	var storage = multer.diskStorage({
+		destination: function (req, file, cb) {
+			cb(null, 'public')
+		},
+		filename: function (req, file, cb) {
+			FilePath = date + '-' + file.originalname;
+			cb(null, date + '-' + file.originalname)
+		}
+	})
+	var upload = multer({ storage: storage }).single('file')
+	upload(req, res, function (err) {
+		if (err instanceof multer.MulterError) {
+			return res.status(500).json(err)
+		} else if (err) {
+			return res.status(500).json(err)
+		}
+		return res.status(200).send(path.resolve('./public/' + FilePath))
 
-// var express=require('express');
-// var app=express();
-// var fs=require('fs');
-// var multer = require('multer');
-// var upload = multer({ dest: 'uploads/' });
-// var bodyParser = require('body-parser');
-// app.use(bodyParser.json());
-// app.use(bodyParser.raw()); 
-// app.use(bodyParser.text()); 
-// app.use(bodyParser.urlencoded({
-//     extended: true
-//  }));
+	})
+}
 
-  
+const SaveRecord = async (result, Type) => {
 
+	//Send To DB
+	var query = "";
 
+	var obj = result;
+	for (var i = 0; i < obj.length; i++) {
 
-// app.use(express.static('public'));
+		switch (Type) {
+			case 'Bank':
+				query = `
+							declare @Count int = 0;
+							   select @Count=COUNT(*) from [dbo].[Bank] where [BranchCode] = '`+ obj[i].branchcode + `'
+							   if(@Count = 0)
+							   begin
+									   INSERT INTO [dbo].[Bank]
+									   (BankName, Address, BranchCode)
+									   VALUES
+									   ('`+ obj[i].bankname + `','` + obj[i].address + `','` + obj[i].branchcode + `');
+							   end
+							   else
+							   begin 
+									   UPDATE  [dbo].[Bank]
+									   SET
+									   BankName = '`+ obj[i].bankname + `',
+									   Address = '`+ obj[i].address + `'
+									   WHERE
+									   BranchCode = '`+ obj[i].branchcode + `';
+									   
+		   
+							   end
+							   `;
+				break;
+			default:
 
+				break;
 
-//  app.post('/file_upload', upload.single('file') , function (req, res) {
-//      console.log('request',req );
-//     console.log('request',req.file.filename);
-//      var file = __dirname + "/" + req.file.filename;
-//      fs.readFile( req.file.path, function (err, data) {
-//        fs.writeFile(file, data, function (err) {
-//           if( err ) {
-//              console.log( err );
-//              } else {
-//                 response = {
-//                    message:'File uploaded successfully',
-//                    filename:req.file.filename
-//                 };
-//              }
-          
-//           console.log( response );
-//           res.end( JSON.stringify(response) );
-//        });
-//     });
-//  })
+		}
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					return res.status(500).json(err)
+				}
+				else {
+					var response = profileset.recordset;
 
-// app.get('/search',function(req,res){
-//     console.log(req.query);
-//     res.end( JSON.stringify( 'search called' ) );
+				}
 
-// })
-
-// var server = app.listen(8081, function () {
-//     var host = server.address().address
-//     var port = server.address().port
-    
-//     console.log("Example app listening at ", host, port)
-//  })
+			});
+	}
+}
+module.exports = { BulkUpload, fileUpload };
