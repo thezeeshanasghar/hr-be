@@ -107,6 +107,10 @@ const message={
 	"error":"Operation Unsuccessfull",
 	"Autherror":"Invalid Credentials"
 }
+//#region Dashboard
+const DashboardPath="/dashboard";
+
+//#endregion
 module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryPath,CompanydefaultPath,CompanySecondaryPath,
 				CostCenterdefaultPath,CostCenterSecondaryPath,CostCenterByCompany,ExchangedefaultPath,ExchangeSecondaryPath,
 				ExchangeByCurrency,BankAccdefaultPath,BankAccSecondaryPath,BankAccByEmployee,EmployeedefaultPath,
@@ -118,4 +122,4 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
 				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath,
 				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,
-				BulkUploadPath,FileUpload};
+				BulkUploadPath,FileUpload,DashboardPath};

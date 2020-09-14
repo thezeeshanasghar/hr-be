@@ -20,29 +20,30 @@ const countryLaw=require('./../controllers/countryLawController');
 const payrollslip=require('./../controllers/PayRollSlipController');
 const report=require('./../controllers/reportController');
 const bulkUpload=require('./../controllers/BulkUploadController');
-
+// const dashboard=require('./../controllers/dashboardController');
 const routing=(app)=>{
-app.use('/api', auth)  
-app.use('/api', Bank)  
-app.use('/api', Company)  
-app.use('/api', costcenter)  
-app.use('/api', currencyexchange)  
-app.use('/api', EmployeeBank)  
-app.use('/api', Employee)  
-app.use('/api', GLACC)  
-app.use('/api', Grade)  
-app.use('/api', Jobs)  
-app.use('/api', PayElement)  
-app.use('/api', PayGLACC)  
-app.use('/api', Position)  
-app.use('/api', Security)  
-app.use('/api', unit)  
-app.use('/api', unpaidleaves)  
-app.use('/api', userProtection) 
+app.use('/api', auth);  
+app.use('/api', Bank);  
+app.use('/api', Company);  
+app.use('/api', costcenter);  
+app.use('/api', currencyexchange);  
+app.use('/api', EmployeeBank);  
+app.use('/api', Employee);  
+app.use('/api', GLACC); 
+app.use('/api', Grade);  
+app.use('/api', Jobs);  
+app.use('/api', PayElement);  
+app.use('/api', PayGLACC);  
+app.use('/api', Position);
+app.use('/api', Security);
+app.use('/api', unit);
+app.use('/api', unpaidleaves);
+app.use('/api', userProtection);
 app.use('/api',lookups); 
 app.use('/api',countryLaw);
 app.use('/api',payrollslip);
 app.use('/api', report);
 app.use('/api',bulkUpload);
+// app.use('/api',dashboard);
 }
 module.exports=routing;
