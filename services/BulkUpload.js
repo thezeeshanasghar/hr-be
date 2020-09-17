@@ -478,21 +478,21 @@ const SaveRecord = async (result, Type) => {
 				break;	
 			case 'PayElementGlAccount':
 				query=`
-				declare  @Count int = 0 , @PayElement int = 0 ,@GlAccount int = 0,@CostCenterPosting int  = 0,@CostCenter int = 0 ,@Company bigint = 0;
+				declare  @Count int = 0 , @PayElement int = 0 ,@GlAccount int = 0,@CostCenter int = 0 ,@Company bigint = 0;
 				select @PayElement=Id from [dbo].[PayElement] where Code ='`+ obj[i].payelement + `';
 				select @GlAccount=Id from [dbo].[GLAccount] where Account='`+ obj[i].glaccount + `';
-				select @CostCenterPosting=Id from [myuser].[LookupItems] where Name='`+ obj[i].costcenterposting + `';
-				select @CostCenter=Id from [dbo].[CostCenter] where Code ='';select @Company=Id from [dbo].[Company] where [Code]='';
+				select @CostCenter=Id from [dbo].[CostCenter] where Code ='`+ obj[i].costcenter + `';
+				select @Company=Id from [dbo].[Company] where [Code]='`+ obj[i].company + `';
 				select @Count=Count(*) from [dbo].[PayElementGlAccount] where PayElementId =@PayElement and GLAccountId =@GlAccount And
 				CostCenterId = @CostCenter;
-				if(not @PayElement = 0 and not @GlAccount = 0 and not @CostCenterPosting = 0 and not @CostCenter = 0 and not @Company = 0)
+				if(not @PayElement = 0 and not @GlAccount = 0 and not @CostCenter = 0 and not @Company = 0)
 				begin
 				if(@Count=0)
 				begin
 				insert into [dbo].[PayElementGlAccount] 
 				(PayElementId, GLAccountId, CostCenterPosting, CostCenterId, PostingPerEmployee)
 				values
-				(@PayElement,@GlAccount,@CostCenterPosting,@CostCenter,'`+ obj[i].postingperemployee + `');
+				(@PayElement,@GlAccount,'`+obj[i].costcenterposting+`',@CostCenter,'`+ obj[i].postingperemployee + `');
 				end
 				end
 				`
@@ -510,7 +510,7 @@ const SaveRecord = async (result, Type) => {
 				select @Company=Id from [dbo].[Company] where Code ='`+ obj[i].company + `';	
 				select @Count=Count(*) from [dbo].[PayElement] where Code ='`+ obj[i].code + `';
 				if(not @Group = 0 and not @Periodicity = 0 and not @Currency = 0 and not @Days = 0 and not @Month = 0 and  not @Increment = 0 and
- 				@Company = 0 )
+ 				not @Company = 0 )
 				 begin
  				if(@Count = 0)
  				begin
@@ -533,7 +533,7 @@ const SaveRecord = async (result, Type) => {
  				CompanyId=@Company,
  				Increment=@Increment
 				 where
- 				Code=''
+ 				Code='`+ obj[i].code + `'
 				end
  				end
 				`
