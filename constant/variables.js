@@ -108,8 +108,9 @@ const message={
 	"Autherror":"Invalid Credentials"
 }
 //#region Dashboard
-const DashboardPath="/dashboard";
-
+const DashboardPath="/dashboard/Companies";
+const CompaniesCountPath="/dashboard/Companies/Count"
+const UsersCountPath="/dashboard/users/Count"
 //#endregion
 module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryPath,CompanydefaultPath,CompanySecondaryPath,
 				CostCenterdefaultPath,CostCenterSecondaryPath,CostCenterByCompany,ExchangedefaultPath,ExchangeSecondaryPath,
@@ -122,4 +123,4 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
 				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath,
 				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,
-				BulkUploadPath,FileUpload,DashboardPath};
+				BulkUploadPath,FileUpload,DashboardPath,CompaniesCountPath,UsersCountPath};

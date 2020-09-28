@@ -478,7 +478,7 @@ const SaveRecord = async (result, Type) => {
 				break;	
 			case 'PayElementGlAccount':
 				query=`
-				declare  @Count int = 0 , @PayElement int = 0 ,@GlAccount int = 0,@CostCenter int = 0 ,@Company bigint = 0;
+				declare  @Count int = 0 , @PayElement int = 0 ,@GlAccount int = 0 ,@CostCenter int = 0 ,@Company bigint = 0;
 				select @PayElement=Id from [dbo].[PayElement] where Code ='`+ obj[i].payelement + `';
 				select @GlAccount=Id from [dbo].[GLAccount] where Account='`+ obj[i].glaccount + `';
 				select @CostCenter=Id from [dbo].[CostCenter] where Code ='`+ obj[i].costcenter + `';
