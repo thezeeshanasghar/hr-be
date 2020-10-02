@@ -72,8 +72,8 @@ const GetPayElementById = async (req, res) => {
 const InsertPayElement = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "Insert into PayElement(Code, Description, GroupId, Increment, Periodicity, CurrencyCode, lumpsum, noofDays, ofMonth, CompanyId)"
-		+" values('"+req.body.Code+"','"+req.body.Description+"','"+req.body.GroupId+"','"+req.body.Increment+"','"+req.body.Periodicity+"','"+req.body.CurrencyCode+"','"+req.body.lumpsum+"','"+req.body.noofDays+"','"+req.body.ofMonth+"','"+req.body.CompanyId+"');";
+		var query = "Insert into PayElement(Code, Description, GroupId, Increment, Periodicity, CurrencyCode, lumpsum, noofDays, ofMonth, CompanyId,Frequency)"
+		+" values('"+req.body.Code+"','"+req.body.Description+"','"+req.body.GroupId+"','"+req.body.Increment+"','"+req.body.Periodicity+"','"+req.body.CurrencyCode+"','"+req.body.lumpsum+"','"+req.body.noofDays+"','"+req.body.ofMonth+"','"+req.body.CompanyId+"','"+req.body.Frequency+"');";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -95,7 +95,7 @@ const InsertPayElement = async (req, res) => {
 const UpdatePayElement = async (req, res) => {
 	try {
 		
-		var query = "update  PayElement set Code = '"+req.body.Code+"',Description = '"+req.body.Description+"',GroupId = '"+req.body.GroupId+"',Increment = '"+req.body.Increment+"',Periodicity = '"+req.body.Periodicity+"',CurrencyCode = '"+req.body.CurrencyCode+"',lumpsum = '"+req.body.lumpsum+"',noofDays = '"+req.body.noofDays+"',ofMonth = '"+req.body.ofMonth+"',CompanyId = '"+req.body.CompanyId+"' where Id = '"+req.params.Id+"' ;";
+		var query = "update  PayElement set Code = '"+req.body.Code+"',Description = '"+req.body.Description+"',GroupId = '"+req.body.GroupId+"',Increment = '"+req.body.Increment+"',Periodicity = '"+req.body.Periodicity+"',CurrencyCode = '"+req.body.CurrencyCode+"',lumpsum = '"+req.body.lumpsum+"',noofDays = '"+req.body.noofDays+"',ofMonth = '"+req.body.ofMonth+"',CompanyId = '"+req.body.CompanyId+"' , Frequency = '"+req.body.Frequency+"' where Id = '"+req.params.Id+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

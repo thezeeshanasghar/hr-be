@@ -50,8 +50,8 @@ const GetPayElementGlAccountById = async (req, res) => {
 const InsertPayElementGlAccount = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "Insert into PayElementGlAccount(PayElementId, GLAccountId, CostCenterPosting, CostCenterId, PostingPerEmployee)"
-		+" values('"+req.body.PayElementId+"','"+req.body.GLAccountId+"','"+req.body.CostCenterPosting+"','"+req.body.CostCenterId+"','"+req.body.PostingPerEmployee+"');";
+		var query = "Insert into PayElementGlAccount(PayElementId, GLAccountId, CostCenterPosting, CostCenterId, PostingPerEmployee,FinStaffCategory)"
+		+" values('"+req.body.PayElementId+"','"+req.body.GLAccountId+"','"+req.body.CostCenterPosting+"','"+req.body.CostCenterId+"','"+req.body.PostingPerEmployee+"','"+req.body.FinStaffCategory+"');";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -73,7 +73,7 @@ const InsertPayElementGlAccount = async (req, res) => {
 const UpdatePayElementGlAccount = async (req, res) => {
 	try {
 		
-		var query = "update  PayElementGlAccount set PayElementId = '"+req.body.PayElementId+"',GLAccountId = '"+req.body.GLAccountId+"',CostCenterPosting = '"+req.body.CostCenterPosting+"',CostCenterId = '"+req.body.CostCenterId+"',PostingPerEmployee = '"+req.body.PostingPerEmployee+"' where Id = '"+req.params.Id+"' ;";
+		var query = "update  PayElementGlAccount set PayElementId = '"+req.body.PayElementId+"',GLAccountId = '"+req.body.GLAccountId+"',CostCenterPosting = '"+req.body.CostCenterPosting+"',CostCenterId = '"+req.body.CostCenterId+"',PostingPerEmployee = '"+req.body.PostingPerEmployee+"' , FinStaffCategory = '"+req.body.FinStaffCategory+"' where Id = '"+req.params.Id+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

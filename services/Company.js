@@ -26,7 +26,13 @@ const GetAllCompanies = async (req, res) => {
 
 const GetCompanyById = async (req, res) => {
 	try {
-		var query = "select * from Company where Id='"+req.params.Id+"' ;";
+		var query =	`select
+					company.Id , company.Code, company.CompanyName, company.Address, 
+					company.Contact, company.Email, company.StartDate, company.RegistrationNo, company.TaxationNo,
+					company.SocialSecurityNo, company.EOBINo, company.CountryCode,
+					acc.BankId, acc.CompanyId, acc.CurrencyId, acc.Createddate, acc.AccNo
+		 			from [dbo].[Company] company inner join
+					[dbo].[CompanyBankAccounts] acc on acc.CompanyId = company.Id where company.Id='`+req.params.Id+`' ;`	;
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -47,9 +53,15 @@ const GetCompanyById = async (req, res) => {
 }
 
 const InsertCompany = async (req, res) => {
+	
 	try {
-		console.log(res);
-		var query = "Insert into Company(Code, CompanyName, Address, Contact, Email, CountryCode) values('"+req.body.Code+"','"+req.body.CompanyName+"','"+req.body.Address+"','"+req.body.Contact+"','"+req.body.Email+"','"+req.body.Country+"');";
+		var query = `insert into [dbo].[Company] (Code, CompanyName, Address, Contact, Email, CountryCode, StartDate, RegistrationNo, TaxationNo, SocialSecurityNo, EOBINo) values('`+req.body.Code+`','`+req.body.CompanyName+`','`+req.body.Address+`','`+req.body.Contact+`','`+req.body.Email+`','`+req.body.CountryCode+`',getdate(),'`+req.body.RegistrationNo+`','`+req.body.TaxationNo+`','`+req.body.SocialSecurityNo+`','`+req.body.EOBINo+`');
+					Declare @Id int=0;
+					set @Id =@@identity;
+					insert into [dbo].[CompanyBankAccounts]
+					( BankId, CompanyId, CurrencyId, Createddate, AccNo)
+					values ('`+req.body.Bank+`',@Id,'`+req.body.Currency+`',getdate(),'`+req.body.AccountNo+`')`;
+					console.log(query);
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -71,8 +83,10 @@ const InsertCompany = async (req, res) => {
 const UpdateCompany = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "update  Company set Code = '"+req.body.Code+"',CompanyName = '"+req.body.CompanyName+"',Address = '"+req.body.Address+"',Contact = '"+req.body.Contact+"',Email = '"+req.body.Email+"',CountryCode = '"+req.body.CountryCode+"' where Id = '"+req.params.Id+"' ;";
-		const pool = await poolPromise
+		var query = `update  Company set Code = '`+req.body.Code+`',CompanyName = '`+req.body.CompanyName+`',Address = '`+req.body.Address+`',Contact = '`+req.body.Contact+`',Email = '`+req.body.Email+`',CountryCode = '`+req.body.CountryCode+`' ,  RegistrationNo = '`+req.body.RegistrationNo+`' , TaxationNo = '`+req.body.TaxationNo+`' , SocialSecurityNo = '`+req.body.SocialSecurityNo +`' , EOBINo = '`+req.body.EOBINo +`' where Id = '`+req.params.Id+`' ;
+						update [dbo].[CompanyBankAccounts] set BankId='`+req.body.Bank+`'  ,CurrencyId='`+req.body.Currency+`' , AccNo='`+req.body.AccountNo+`'  where  CompanyId ='`+req.params.Id+`'  `;
+		console.log(query);
+						const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
@@ -93,7 +107,8 @@ const UpdateCompany = async (req, res) => {
 const DeleteCompany = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from Company where Id in ("+req.params.Id+") ;";
+		var query = `delete from Company where Id in (`+req.params.Id+`) ;
+					 delete from [dbo].[CompanyBankAccounts] where [CompanyId] in (`+req.params.Id+`) `;
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
