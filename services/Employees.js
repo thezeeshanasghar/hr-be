@@ -1,7 +1,7 @@
 
 const { message } = require('../constant/variables');
 const {sql, poolPromise } = require('../config/db');
-// const { sql } = require('mssql');
+const EmployeeDetail=require('../models/EmployeeDetail');
 
 const GetEmployees = async (req, res) => {
 	try {
@@ -245,5 +245,50 @@ const DeleteEmployee = async (req, res) => {
 	}
 }
 
+const GetEmployeeAdvanceDetail = async (req, res) => {
+	
+	try {
+		var query = `select  
+		emp.InsuranceId, 
+		emp.TaxationId,
+		emp.Cnic,
+		emp.FirstName,
+		emp.LastName,
+		format(emp.DOB,'dd/MM/yyyy') as DOB,
+		format(emp.HireDate,'dd/MM/yyyy') as HireDate,
+		emp.HiringReason,
+		format(emp.ServiceStartDate,'dd/MM/yyyy') as ServiceStartDate,
+		format(emp.ProbationEndDate,'dd/MM/yyyy') as ProbationEndDate, 
+		emp.PartTimePercentage,
+		(select [Title] from [dbo].[Positions] where Id = emp.PositionId) as Positions, (select [Title] from [dbo].[Grade] where Id = emp.GradeId) as Grade , 
+		emp.Address,
+		emp.Contact,
+		emp.ContractEndDate,
+		comp.CompanyName
+		from [dbo].[Employees] emp 
+		inner join
+		[dbo].[Company] comp on comp.Id=emp.CompanyId where emp.Id ='`+req.params.Id+`'
+		select * from [myuser].[PeriodicPayElements] where EmployeeId='`+req.params.Id+`'
+		select * from [myuser].[OnetimeElement] where EmployeeId='`+req.params.Id+`'
+		select * from [dbo].[EmployeeBankAccount] where EmployeeId='`+req.params.Id+`'
+		`;
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var response = profileset.recordsets;
+					res.send(EmployeeDetail(response));
+					return ;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
 module.exports = { getEmployeeApplcableLaws,GetEmployees,GetEmployeesByCompany,GetEmployeeById,
-	InsertEmployee,UpdateEmployee,DeleteEmployee,GetEmployeePayRoll};
+	InsertEmployee,UpdateEmployee,DeleteEmployee,GetEmployeePayRoll,GetEmployeeAdvanceDetail};

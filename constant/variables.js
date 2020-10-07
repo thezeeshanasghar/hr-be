@@ -30,6 +30,7 @@ const EmployeeSecondaryPath=EmployeedefaultPath+'/:Id';
 const EmployeeByCompany=EmployeedefaultPath+'/ByCompany/:CompanyId';
 const EmployeePayroll=EmployeedefaultPath+'/PayRoll/:EmployeeId';
 const EmployeeApplcableLaws=EmployeedefaultPath+'/ApplicableLaw/:EmployeeId';
+const EmployeeAdvanceDetail=EmployeedefaultPath+"/details/:Id";
 //#endregion
 
 //#region GLAccount
@@ -112,6 +113,11 @@ const DashboardPath="/dashboard/Companies";
 const CompaniesCountPath="/dashboard/Companies/Count"
 const UsersCountPath="/dashboard/users/Count"
 //#endregion
+
+//#region Termination
+const TerminationPrimaryPath="/termination";
+const TerminationSecondaryPath=TerminationPrimaryPath+"/:Id";
+//#endregion
 module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryPath,CompanydefaultPath,CompanySecondaryPath,
 				CostCenterdefaultPath,CostCenterSecondaryPath,CostCenterByCompany,ExchangedefaultPath,ExchangeSecondaryPath,
 				ExchangeByCurrency,BankAccdefaultPath,BankAccSecondaryPath,BankAccByEmployee,EmployeedefaultPath,
@@ -123,4 +129,6 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
 				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath,
 				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,
-				BulkUploadPath,FileUpload,DashboardPath,CompaniesCountPath,UsersCountPath};
+				BulkUploadPath,FileUpload,DashboardPath,CompaniesCountPath,UsersCountPath,
+				TerminationPrimaryPath,TerminationSecondaryPath,
+				EmployeeAdvanceDetail};
