@@ -4,7 +4,10 @@ const { poolPromise } = require('../config/db');
 
 const GetAllUserProtection = async (req, res) => {
 	try {
-		var query = "select * from  UserProtection ;";
+		var query = `
+		select protection.Id,LabourId,CompanyName,(select Name from [myuser].[LookupItems] where Id =protection.Country ) as Country from WagesProtection protection inner join
+		[dbo].[Company] company on company.Id = protection.CompanyId
+		`;
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -12,7 +15,7 @@ const GetAllUserProtection = async (req, res) => {
 					console.log(err)
 				}
 				else {
-					var response = profileset.recordset;
+					var response = {data:profileset.recordset};
 					res.send(response);
 					return ;
 				}
@@ -27,7 +30,7 @@ const GetAllUserProtection = async (req, res) => {
 const GetUserProtectionByCompany = async (req, res) => {
 	try {
 		
-		var query = "select * from  UserProtection where CompanyId = '"+req.params.Id+"' ;";
+		var query = "select * from  WagesProtection where CompanyId = '"+req.params.Id+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -49,7 +52,7 @@ const GetUserProtectionByCompany = async (req, res) => {
 const GetUserProtectionById = async (req, res) => {
 	
 	try {
-		var query = "select * from UserProtection where Id='"+req.params.Id+"' ;";
+		var query = "select * from WagesProtection where Id='"+req.params.Id+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -72,7 +75,7 @@ const GetUserProtectionById = async (req, res) => {
 const InsertUserProtection = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "Insert into UserProtection(CompanyId,LabourId) values('"+req.body.CompanyId+"','"+req.body.LabourId+"');";
+		var query = "Insert into WagesProtection(CompanyId,LabourId, Country) values('"+req.body.CompanyId+"','"+req.body.LabourId+"','"+req.body.Country+"');";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -94,7 +97,7 @@ const InsertUserProtection = async (req, res) => {
 const UpdateUserProtection = async (req, res) => {
 	try {
 		
-		var query = "update  UserProtection set CompanyId = '"+req.body.CompanyId+"',LabourId = '"+req.body.LabourId+"' where Id = '"+req.params.Id+"' ;";
+		var query = "update  WagesProtection set CompanyId = '"+req.body.CompanyId+"',LabourId = '"+req.body.LabourId+"' , Country='"+req.body.Country+"' where Id = '"+req.params.Id+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -116,7 +119,7 @@ const UpdateUserProtection = async (req, res) => {
 const DeleteUserProtection= async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from UserProtection where Id='"+req.params.Id+"' ;";
+		var query = "delete from WagesProtection where Id in ("+req.params.Id+") ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

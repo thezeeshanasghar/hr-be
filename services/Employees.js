@@ -9,7 +9,7 @@ const GetEmployees = async (req, res) => {
 		Id, CompanyId, EmployeeCode, InsuranceId, TaxationId, Cnic, FirstName, 
 		LastName, format(DOB,'dd/MM/yyyy') as DOB , format(HireDate,'dd/MM/yyyy') as HireDate ,
 		 HiringReason, format(ServiceStartDate,'dd/MM/yyyy') as ServiceStartDate ,
-		format(ProbationEndDate,'dd/MM/yyyy') as ProbationEndDate,PartTimePercentage,format(ContractEndDate,'dd/MM/yyyy'),
+		format(ProbationEndDate,'dd/MM/yyyy') as ProbationEndDate,PartTimePercentage,format(ContractEndDate,'dd/MM/yyyy') as ContractEndDate,
 		PositionId, GradeId, Address, Contact,Gender, MaritalStatus, ContractType, Country,
 		CurrentEmployeeStatus,PartTimeSituation, Title, Email
 		from 
@@ -57,7 +57,7 @@ const GetEmployeesByCompany = async (req, res) => {
 const GetEmployeePayRoll = async (req, res) => {
 	
 	try {
-		var query = "select Id, PayelementId, value, Currency,FORMAT (StartDate, 'yyyy-MM-dd') as StartDate  ,  FORMAT (EndDate, 'yyyy-MM-dd') as EndDate , EmployeeId from [myuser].[EmployeePayRoll] where [EmployeeId]='"+req.params.EmployeeId+"' ;";
+		var query = "select Id, CompanyId, EmployeeId, PayElementId,format(StartDate,'yyyy-MM-dd') as StartDate , amount, Currency, Frequency as frequency, Entitlement as entitlement,format(EndDate,'yyyy-MM-dd') as EndDate  from [myuser].[PeriodicPayElements] where [EmployeeId]='"+req.params.EmployeeId+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -76,6 +76,30 @@ const GetEmployeePayRoll = async (req, res) => {
 		return "error";
 	}
 }
+
+const GetEmployeeoneTimePayRoll = async (req, res) => {
+	
+	try {
+		var query = "select Id, CompanyId, EmployeeId, PayElementId as PayelementId, format(EffectiveDate,'yyyy-MM-dd') as EffectiveDate , Amount, Currency, Entitlement as entitlement from [myuser].[OnetimeElement] where [EmployeeId]='"+req.params.Id+"' ;";
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var response = profileset.recordset;
+					res.send(response);
+					return ;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
+
 const getEmployeeApplcableLaws = async (req, res) => {
 	
 	try {
@@ -123,7 +147,9 @@ const GetEmployeeById = async (req, res) => {
 }
 
 const InsertEmployee = async (req, res) => {
+	console.log(req.body,req.body.Title);
 	try {  
+	
 		const pool = await poolPromise  
 		const result = await pool.request()
 		.input("Title", sql.BIGINT,req.body.Title)  
@@ -146,7 +172,7 @@ const InsertEmployee = async (req, res) => {
 		.input("GradeId", sql.BIGINT,req.body.GradeId)  
 		.input("HireDate", sql.VarChar(20),req.body.HireDate)  
 		.input("HiringReason", sql.VarChar(500),req.body.HiringReason) 
-		.input("IBAN", sql.BIGINT,req.body.IBAN)  
+		.input("IBAN", sql.VarChar(500),req.body.IBAN)  
 		.input("InsuranceId", sql.VarChar(500),req.body.InsuranceId)  
 		.input("IsPrimary", sql.BIGINT,req.body.IsPrimary)  
 		.input("LastName", sql.VarChar(500),req.body.LastName)  
@@ -156,7 +182,8 @@ const InsertEmployee = async (req, res) => {
 		.input("Paymethod", sql.BIGINT,req.body.Paymethod) 
 		.input("PositionId", sql.BIGINT,req.body.PositionId) 
 		.input("PayRollDetail", sql.NVARCHAR(4000),req.body.PayRollDetail)
-		.input("TaxationId", sql.BIGINT,req.body.TaxationId)  
+		.input("OneTimePayRollDetail", sql.NVARCHAR(4000),req.body.OneTimePayRollDetail)
+		.input("TaxationId", sql.VarChar(500),req.body.TaxationId)  
 		.input("ServiceStartDate", sql.VarChar(20),req.body.ServiceStartDate)  
 		.input("ProbationEndDate", sql.VarChar(20),req.body.ProbationEndDate)
 		.input("SalaryStatus", sql.BIGINT,req.body.SalaryStatus)  
@@ -211,6 +238,7 @@ const UpdateEmployee = async (req, res) => {
 		.input("ProbationEndDate", sql.VarChar(20),req.body.ProbationEndDate)
 		.input("SalaryStatus", sql.BIGINT,req.body.SalaryStatus)  
 		.input("ApplicableLaws", sql.NVarChar(4000),req.body.ApplicableLaws)  
+		.input("OneTimePayRollDetail", sql.NVARCHAR(4000),req.body.OneTimePayRollDetail)
 		.execute("[dbo].[UpdateEmployee]").then(function (recordSet) { 
 		 res.status(200).json({ status: "Success" })  ;
 		//  return ;
@@ -268,9 +296,11 @@ const GetEmployeeAdvanceDetail = async (req, res) => {
 		from [dbo].[Employees] emp 
 		inner join
 		[dbo].[Company] comp on comp.Id=emp.CompanyId where emp.Id ='`+req.params.Id+`'
-		select * from [myuser].[PeriodicPayElements] where EmployeeId='`+req.params.Id+`'
-		select * from [myuser].[OnetimeElement] where EmployeeId='`+req.params.Id+`'
-		select * from [dbo].[EmployeeBankAccount] where EmployeeId='`+req.params.Id+`'
+		select  payele.Code, EmployeeId, PayElementId, format(StartDate, 'dd/MM/yyyy') as StartDate, amount, Currency, Entitlement, format(EndDate,'dd/MM/yyyy') as EndDate from [myuser].[PeriodicPayElements] periodic inner join
+		[dbo].[PayElement] payele on payele.Id = periodic.PayElementId where EmployeeId='`+req.params.Id+`'
+		select ele.Code,onetime.Id, EmployeeId, PayElementId, FORMAT(EffectiveDate,'dd/MM/yyyy') as EffectiveDate, Amount, Currency, Entitlement from [myuser].[OnetimeElement] onetime inner join [dbo].[PayElement] ele on ele.Id = onetime.PayElementId where EmployeeId='`+req.params.Id+`'
+		select  CompanyId, BankId, IBAN, format(EffectiveDate,'dd/MM/yyyy') as EffectiveDate, IsPrimary, CurrencyCode, EmployeeId,bank.BankName from [dbo].[EmployeeBankAccount] 
+			acc inner join  [dbo].[Bank] bank on bank.Id = acc.BankId where EmployeeId='`+req.params.Id+`'
 		`;
 		const pool = await poolPromise
 		const result = await pool.request()
@@ -291,4 +321,4 @@ const GetEmployeeAdvanceDetail = async (req, res) => {
 	}
 }
 module.exports = { getEmployeeApplcableLaws,GetEmployees,GetEmployeesByCompany,GetEmployeeById,
-	InsertEmployee,UpdateEmployee,DeleteEmployee,GetEmployeePayRoll,GetEmployeeAdvanceDetail};
+	InsertEmployee,UpdateEmployee,DeleteEmployee,GetEmployeePayRoll,GetEmployeeAdvanceDetail,GetEmployeeoneTimePayRoll};

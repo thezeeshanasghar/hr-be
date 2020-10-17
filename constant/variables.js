@@ -31,6 +31,7 @@ const EmployeeByCompany=EmployeedefaultPath+'/ByCompany/:CompanyId';
 const EmployeePayroll=EmployeedefaultPath+'/PayRoll/:EmployeeId';
 const EmployeeApplcableLaws=EmployeedefaultPath+'/ApplicableLaw/:EmployeeId';
 const EmployeeAdvanceDetail=EmployeedefaultPath+"/details/:Id";
+const oneTimePayRoll=EmployeedefaultPath+"/onetime/:Id";
 //#endregion
 
 //#region GLAccount
@@ -131,4 +132,4 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,
 				BulkUploadPath,FileUpload,DashboardPath,CompaniesCountPath,UsersCountPath,
 				TerminationPrimaryPath,TerminationSecondaryPath,
-				EmployeeAdvanceDetail};
+				EmployeeAdvanceDetail,oneTimePayRoll};

@@ -5,7 +5,7 @@
 	const GetEmployeeTermination = async (req, res) => {
 		try {
 			var query = `
-			select company.[CompanyName],emp.[FirstName],termination.* from [myuser].[EmployeeTermination] termination
+			select company.[CompanyName],emp.[FirstName],termination.Id, termination.CompanyId, termination.EmployeeId, format(termination.LastWorkingDate,'dd/MM/yyyy') as LastWorkingDate, termination.TerminationReason from [myuser].[EmployeeTermination] termination
 			inner join 
 			[dbo].[Employees]  emp on emp.Id = termination.EmployeeId
 			inner join
@@ -55,13 +55,14 @@
 	}
 
 	const InsertEmployeeTermination = async (req, res) => {
+
 		try {
 			var query = `
 			
 			insert into [myuser].[EmployeeTermination]
 			(CompanyId, EmployeeId, LastWorkingDate, TerminationReason)
 			values
-			('`+req.body.company+`','`+req.body.employee+`','`+req.body.lastDate+`','`+req.body.reason+`');
+			('`+req.body.CompanyId+`','`+req.body.EmployeeId+`','`+req.body.lastDate+`','`+req.body.reason+`');
 			`
 			const pool = await poolPromise
 			const result = await pool.request()
