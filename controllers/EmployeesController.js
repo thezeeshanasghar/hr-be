@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const sql = require('mssql')
-const {EmployeeApplcableLaws, EmployeePayroll,EmployeeByCompany,EmployeeSecondaryPath,EmployeedefaultPath,EmployeeAdvanceDetail} = require('./../constant/variables')
-const {getEmployeeApplcableLaws,GetEmployeePayRoll,GetEmployees,GetEmployeeById,InsertEmployee,UpdateEmployee,DeleteEmployee,GetEmployeesByCompany,GetEmployeeAdvanceDetail} = require('./../services/Employees')
+const {EmployeeApplcableLaws, EmployeePayroll,EmployeeByCompany,EmployeeSecondaryPath,EmployeedefaultPath,EmployeeAdvanceDetail,oneTimePayRoll} = require('./../constant/variables')
+const {getEmployeeApplcableLaws,GetEmployeePayRoll,GetEmployees,GetEmployeeById,InsertEmployee,UpdateEmployee,DeleteEmployee,GetEmployeesByCompany,GetEmployeeAdvanceDetail,GetEmployeeoneTimePayRoll} = require('./../services/Employees')
 router.get(EmployeedefaultPath, async (req, res) => {
 	GetEmployees(req, res);
 });
@@ -29,5 +29,8 @@ router.delete(EmployeeSecondaryPath, async (req, res) => {
 })
 router.get(EmployeeAdvanceDetail, async (req, res) => {
 	GetEmployeeAdvanceDetail(req, res);
+});
+router.get(oneTimePayRoll, async (req, res) => {
+	GetEmployeeoneTimePayRoll(req, res);
 });
 module.exports = router;
