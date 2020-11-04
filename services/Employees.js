@@ -3,6 +3,34 @@ const { message } = require('../constant/variables');
 const {sql, poolPromise } = require('../config/db');
 const EmployeeDetail=require('../models/EmployeeDetail');
 
+
+const GetEmployeesSelective = async (req, res) => {
+	try {
+		var query = `select 
+		Id as value , concat(FirstName,' ', LastName) as label   
+		
+		from 
+		[dbo].[Employees] where CompanyId = '`+req.params.CompanyId+`' ;`;
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var response = profileset.recordset;
+					response.push({"value":'All','label':'All'});
+					res.send(response);
+					return ;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
+
 const GetEmployees = async (req, res) => {
 	try {
 		var query = `select 
@@ -321,4 +349,4 @@ const GetEmployeeAdvanceDetail = async (req, res) => {
 	}
 }
 module.exports = { getEmployeeApplcableLaws,GetEmployees,GetEmployeesByCompany,GetEmployeeById,
-	InsertEmployee,UpdateEmployee,DeleteEmployee,GetEmployeePayRoll,GetEmployeeAdvanceDetail,GetEmployeeoneTimePayRoll};
+	InsertEmployee,UpdateEmployee,DeleteEmployee,GetEmployeePayRoll,GetEmployeeAdvanceDetail,GetEmployeeoneTimePayRoll,GetEmployeesSelective};

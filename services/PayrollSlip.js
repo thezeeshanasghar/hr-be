@@ -2,11 +2,12 @@
 const { message } = require('../constant/variables');
 const {sql, poolPromise } = require('../config/db');
 var exceltojson = require("xlsx-to-json-lc");
+const { MAX } = require('mssql');
 
 
 
 const GeneratePayroll = async (req, res) => {
-
+console.log(req.body)
 	if(req.body.SalaryType=="Bonus"){
 
 		
@@ -53,10 +54,10 @@ const GeneratePayroll = async (req, res) => {
 		try {  
 			const pool = await  poolPromise  
 			const result = await pool.request()
-			.input("PayMonth", sql.VarChar(300),req.body.Title)  
-			.input("CompanyId", sql.VarChar(300),req.body.Address)  
-			.input("EmployeesIds", sql.BIGINT,req.body.BankId)  
-			.input("SalaryType", sql.VarChar(500),req.body.Cnic) 
+			.input("PayMonth", sql.VarChar(300),req.body.PayMonth)  
+			.input("CompanyId", sql.VarChar(300),req.body.CompanyId)  
+			.input("EmployeesIds", sql.VarChar(MAX),req.body.EmployeesIds)  
+			.input("SalaryType", sql.VarChar(500),req.body.SalaryType) 
 			.input("OffDateFrom", sql.VarChar(500),req.body.dateFrom) 
 			.input("OffdateTo", sql.VarChar(500),req.body.dateTo) 
 		

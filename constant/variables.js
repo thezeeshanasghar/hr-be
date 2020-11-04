@@ -9,6 +9,7 @@ const BankSecondaryPath=defaultPath+'/:Id';
 //#region  Company
 const CompanydefaultPath='/Company';
 const CompanySecondaryPath=CompanydefaultPath+'/:Id';
+const CompanySelectivePath=CompanydefaultPath+'/Selective/data';
 //#endregion CostCenter
 const CostCenterdefaultPath='/CostCenter';
 const CostCenterSecondaryPath=CostCenterdefaultPath+'/:Id';
@@ -32,6 +33,7 @@ const EmployeePayroll=EmployeedefaultPath+'/PayRoll/:EmployeeId';
 const EmployeeApplcableLaws=EmployeedefaultPath+'/ApplicableLaw/:EmployeeId';
 const EmployeeAdvanceDetail=EmployeedefaultPath+"/details/:Id";
 const oneTimePayRoll=EmployeedefaultPath+"/onetime/:Id";
+const EmployeeSelective=EmployeedefaultPath+"/selective/data/:CompanyId";
 //#endregion
 
 //#region GLAccount
@@ -119,7 +121,7 @@ const UsersCountPath="/dashboard/users/Count"
 const TerminationPrimaryPath="/termination";
 const TerminationSecondaryPath=TerminationPrimaryPath+"/:Id";
 //#endregion
-module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryPath,CompanydefaultPath,CompanySecondaryPath,
+module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryPath,CompanydefaultPath,CompanySelectivePath,CompanySecondaryPath,
 				CostCenterdefaultPath,CostCenterSecondaryPath,CostCenterByCompany,ExchangedefaultPath,ExchangeSecondaryPath,
 				ExchangeByCurrency,BankAccdefaultPath,BankAccSecondaryPath,BankAccByEmployee,EmployeedefaultPath,
 				EmployeeSecondaryPath,EmployeeByCompany,EmployeePayroll,EmployeeApplcableLaws,GLAccdefaultPath,GLAccSecondaryPath,GLAccByCompany,
@@ -132,4 +134,4 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,
 				BulkUploadPath,FileUpload,DashboardPath,CompaniesCountPath,UsersCountPath,
 				TerminationPrimaryPath,TerminationSecondaryPath,
-				EmployeeAdvanceDetail,oneTimePayRoll};
+				EmployeeAdvanceDetail,oneTimePayRoll,EmployeeSelective};
