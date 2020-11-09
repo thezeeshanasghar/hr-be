@@ -55,6 +55,7 @@ const JobByCompany=JobdefaultPath+'/ByCompany/:CompanyId';
 const PayElementdefaultPath='/PayElement';
 const PayElementSecondaryPath=PayElementdefaultPath+'/:Id';
 const PayElementByCompany=PayElementdefaultPath+'/ByCompany/:CompanyId';
+const PayElementSelectivePath=PayElementdefaultPath+'/Selective/:Id';
 //#endregion
 //#region PayElementGLAccount
 const PayElementGLAccountdefaultPath='/PayElementGLAccount';
@@ -120,13 +121,15 @@ const UsersCountPath="/dashboard/users/Count"
 //#region Termination
 const TerminationPrimaryPath="/termination";
 const TerminationSecondaryPath=TerminationPrimaryPath+"/:Id";
+
+const ReversePayroll=PaySlipDefaultPath+"/reversePayroll"
 //#endregion
 module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryPath,CompanydefaultPath,CompanySelectivePath,CompanySecondaryPath,
 				CostCenterdefaultPath,CostCenterSecondaryPath,CostCenterByCompany,ExchangedefaultPath,ExchangeSecondaryPath,
 				ExchangeByCurrency,BankAccdefaultPath,BankAccSecondaryPath,BankAccByEmployee,EmployeedefaultPath,
 				EmployeeSecondaryPath,EmployeeByCompany,EmployeePayroll,EmployeeApplcableLaws,GLAccdefaultPath,GLAccSecondaryPath,GLAccByCompany,
 				GradesdefaultPath,GradesSecondaryPath,GradesByCompany,JobdefaultPath,JobSecondaryPath,JobByCompany,
-				PayElementdefaultPath,PayElementSecondaryPath,PayElementByCompany,PayElementGLAccountdefaultPath,
+				PayElementdefaultPath,PayElementSelectivePath,PayElementSecondaryPath,PayElementByCompany,PayElementGLAccountdefaultPath,
 				PayElementGLAccountSecondaryPath,PositiondefaultPath,PositionSecondaryPath,PositionByCompany,
 				SocialSecuritydefaultPath,SocialSecuritySecondaryPath,SocialSecurityByCompany,
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
@@ -134,4 +137,4 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,
 				BulkUploadPath,FileUpload,DashboardPath,CompaniesCountPath,UsersCountPath,
 				TerminationPrimaryPath,TerminationSecondaryPath,
-				EmployeeAdvanceDetail,oneTimePayRoll,EmployeeSelective};
+				EmployeeAdvanceDetail,oneTimePayRoll,EmployeeSelective,ReversePayroll};

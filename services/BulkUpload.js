@@ -633,6 +633,29 @@ const SaveRecord = async (result, Type) => {
 					end
 					`
 					break;
+				case 'overtime':
+					query=`
+					declare @EmployeeId bigint,@CompanyId bigint,@Count int;
+					select @CompanyId=Id from [dbo].[Company] where Code ='`+obj[i].companycode+`';
+					select @EmployeeId=Id from [dbo].[Employees] where EmployeeCode ='`+obj[i].employeecode+`';
+					select @Count=count(*) from  [dbo].[Employeeovertime] where  [Paidon]='`+obj[i].paidon+`' And EmployeeId=@EmployeeId
+					if(@Count=0)
+					begin
+					insert into [dbo].[Employeeovertime]( [EmployeeId], [OvertimeAmount], [Paidon], [CompanyId])
+					values(@EmployeeId,'`+obj[i].overtimepayment+`','`+obj[i].paidon+`',@CompanyId);
+					end 
+					else
+					begin
+					update [dbo].[Employeeovertime]
+					set
+					[OvertimeAmount]='`+obj[i].overtimepayment+`',
+					[Paidon]='`+obj[i].paidon+`'
+					where
+					[EmployeeId]=@EmployeeId
+					end
+					`;
+					console.log(query);
+					break;	
 			default:
 
 				break;

@@ -2,6 +2,31 @@
 const { message } = require('../constant/variables');
 const { poolPromise } = require('../config/db');
 
+
+const GetSelectivePayElementById = async (req, res) => {
+	try {
+		var query = `select payele.Id as value , CONCAT(payele.Code,'-',lookups.Name) as label from [dbo].[PayElement] payele inner join
+		[myuser].[LookupItems] lookups on lookups.Id = payele.GroupId where payele.CompanyId='`+req.params.Id+`'`;
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var response = profileset.recordset;
+					res.send(response);
+					return ;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
+
+
 const GetAllPayElement = async (req, res) => {
 	try {
 		var query = "select * from  PayElement ;";
@@ -138,4 +163,4 @@ const DeletePayElement= async (req, res) => {
 }
 
 module.exports = { GetAllPayElement,GetPayElementByCompany,GetPayElementById,
-					InsertPayElement,UpdatePayElement,DeletePayElement};
+					InsertPayElement,UpdatePayElement,DeletePayElement,GetSelectivePayElementById};
