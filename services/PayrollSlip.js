@@ -7,7 +7,7 @@ const { MAX } = require('mssql');
 
 
 const GeneratePayroll = async (req, res) => {
-console.log(req.body)
+console.log("working")
 	if(req.body.SalaryType=="Bonus"){
 
 		
@@ -29,8 +29,6 @@ console.log(req.body)
 
 				
 		try {  
-			console.log(req.body.CompanyId)
-			console.log(rows)
 			const pool = await  poolPromise  
 			const result = await pool.request()
 	
@@ -50,26 +48,28 @@ console.log(req.body)
 		});
 	}else{
 
-
 		try {  
+	
 			const pool = await  poolPromise  
 			const result = await pool.request()
 			.input("PayMonth", sql.VarChar(300),req.body.PayMonth)  
 			.input("CompanyId", sql.VarChar(300),req.body.CompanyId)  
-			.input("EmployeesIds", sql.VarChar(MAX),req.body.EmployeesIdsf)  
+			.input("EmployeesIds", sql.VarChar(MAX),req.body.EmployeesIds)  
 			.input("SalaryType", sql.VarChar(500),req.body.SalaryType) 
 			.input("OffDateFrom", sql.VarChar(500),req.body.dateFrom) 
 			.input("OffdateTo", sql.VarChar(500),req.body.dateTo) 
 			.input("PayElement", sql.VarChar(MAX),req.body.PayElement) 
 		
-			.execute("[dbo].[GenerateSalarySlip]").then(function (recordSet) { 
-			 res.status(200).json({ status: "Success" })  ;
-			//  return ;
+			.execute("[dbo].[GenerateSalarySlipNew]").then(function (recordSet) { 
+				console.log("success")
+			 res.status(200).json({ status: "Executed",data:recordSet })  ;
+			 return ;
 			})  
 			} catch (err) {  
+				console.log("error")
 			res.status(400).json({ message:err.message})  
 			res.send(err.message)  
-			// return "error";
+			return "error";
 			} 
 	}
 
@@ -100,7 +100,7 @@ const GetPayRollSlip=async (req,res)=>{
 	try {
 		console.log(res);
 		var query = `
-		select payroll.[Id], payroll.[EmployeeId], [payables], [taxdeduction], [leavededuct], [paid], payroll.[CompanyId], format([Paidon],'dd/MM/yyyy')  as [Paidon], [PayRollType],emp.FirstName from [myuser].[SalaryPayRoll] payroll inner join
+		select payroll.[Id], payroll.[EmployeeId], [payables], [taxdeduction], [leavededuct], [paid], payroll.[CompanyId], format([Paidon],'dd/MM/yyyy')  as [Paidon], [PayRollType],emp.FirstName , payroll.PayGroup,payroll.Status from [myuser].[SalaryPayRoll] payroll inner join
 		[dbo].[Employees] emp on emp.Id=payroll.EmployeeId
 		order by payroll.CompanyId`;
 
@@ -125,8 +125,11 @@ const GetPayRollSlip=async (req,res)=>{
 
 const reversePayroll=async (req,res)=>{
 	try {
-		var query = `
-		delete from [myuser].[SalaryPayRoll] where Paidon ='`+req.body.Date+`' and CompanyId='`+req.body.Company+`'`;
+		var query = 
+		`
+		delete from [myuser].[SalaryPayRoll] where GroupName ='`+req.body.GroupName+`' and CompanyId='`+req.body.Company+`'
+		update [dbo].[Employeeovertime] set GroupName=NULL where GroupName ='`+req.body.GroupName+`' and CompanyId='`+req.body.Company+`'
+		`;
 
 		const pool = await poolPromise
 		const result = await pool.request()
@@ -146,4 +149,49 @@ const reversePayroll=async (req,res)=>{
 		return "error";
 	}
 }
-module.exports = { GeneratePayroll,GetPayRollSlip,reversePayroll};
+const getSpecificPayroll=async (req,res)=>{
+	try {
+		var query = `
+		select distinct PayGroup,Status,format(Paidon,'dd/MM/yyyy') as paidon from [myuser].[SalaryPayRoll] where CompanyId='`+req.params.Company+`'`;
+
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var response = {data:profileset.recordset};
+					res.send(response);
+					return ;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
+const changeStatus=async (req,res)=>{
+	try {
+		var query = `update [myuser].[SalaryPayRoll] set [Status]='`+req.params.status+`' where [PayGroup]='`+req.params.code+`'`;
+
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var response = {data:profileset.recordset};
+					res.send(response);
+					return ;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
+module.exports = { GeneratePayroll,GetPayRollSlip,reversePayroll,getSpecificPayroll,changeStatus};

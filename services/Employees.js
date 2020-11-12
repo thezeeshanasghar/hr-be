@@ -324,11 +324,12 @@ const GetEmployeeAdvanceDetail = async (req, res) => {
 		from [dbo].[Employees] emp 
 		inner join
 		[dbo].[Company] comp on comp.Id=emp.CompanyId where emp.Id ='`+req.params.Id+`'
-		select  payele.Code, EmployeeId, PayElementId, format(StartDate, 'dd/MM/yyyy') as StartDate, amount, Currency, Entitlement, format(EndDate,'dd/MM/yyyy') as EndDate from [myuser].[PeriodicPayElements] periodic inner join
+		select  payele.Code, EmployeeId, PayElementId, format(StartDate, 'dd/MM/yyyy') as StartDate, amount, Currency, Entitlement, format(EndDate,'dd/MM/yyyy') as EndDate,[PaymentDate] from [myuser].[PeriodicPayElements] periodic inner join
 		[dbo].[PayElement] payele on payele.Id = periodic.PayElementId where EmployeeId='`+req.params.Id+`'
-		select ele.Code,onetime.Id, EmployeeId, PayElementId, FORMAT(EffectiveDate,'dd/MM/yyyy') as EffectiveDate, Amount, Currency, Entitlement from [myuser].[OnetimeElement] onetime inner join [dbo].[PayElement] ele on ele.Id = onetime.PayElementId where EmployeeId='`+req.params.Id+`'
+		select ele.Code,onetime.Id, EmployeeId, PayElementId, FORMAT(EffectiveDate,'dd/MM/yyyy') as EffectiveDate, Amount, Currency, Entitlement,[PaymentDate] from [myuser].[OnetimeElement] onetime inner join [dbo].[PayElement] ele on ele.Id = onetime.PayElementId where EmployeeId='`+req.params.Id+`'
 		select  CompanyId, BankId, IBAN, format(EffectiveDate,'dd/MM/yyyy') as EffectiveDate, IsPrimary, CurrencyCode, EmployeeId,bank.BankName from [dbo].[EmployeeBankAccount] 
 			acc inner join  [dbo].[Bank] bank on bank.Id = acc.BankId where EmployeeId='`+req.params.Id+`'
+		select *,FORMAT(Paidon,'MMM-yyyy') as PayMonth  from [myuser].[SalaryPayRoll] where EmployeeId='`+req.params.Id+`'
 		`;
 		const pool = await poolPromise
 		const result = await pool.request()

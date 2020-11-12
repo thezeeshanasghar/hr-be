@@ -123,6 +123,8 @@ const TerminationPrimaryPath="/termination";
 const TerminationSecondaryPath=TerminationPrimaryPath+"/:Id";
 
 const ReversePayroll=PaySlipDefaultPath+"/reversePayroll"
+const specificPayroll=PaySlipDefaultPath+"/specific/:Company";
+const changeStatuspayroll=PaySlipDefaultPath+"/status/:status/:code"
 //#endregion
 module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryPath,CompanydefaultPath,CompanySelectivePath,CompanySecondaryPath,
 				CostCenterdefaultPath,CostCenterSecondaryPath,CostCenterByCompany,ExchangedefaultPath,ExchangeSecondaryPath,
@@ -137,4 +139,4 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,
 				BulkUploadPath,FileUpload,DashboardPath,CompaniesCountPath,UsersCountPath,
 				TerminationPrimaryPath,TerminationSecondaryPath,
-				EmployeeAdvanceDetail,oneTimePayRoll,EmployeeSelective,ReversePayroll};
+				EmployeeAdvanceDetail,oneTimePayRoll,EmployeeSelective,ReversePayroll,specificPayroll,changeStatuspayroll};

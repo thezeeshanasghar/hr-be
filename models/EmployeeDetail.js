@@ -20,7 +20,8 @@ const EmployeeDetail=(obj)=>{
 		CompanyName:obj[0][0].CompanyName,
 		PeriodicPayElements:obj[1],
 		OnetimeElement:obj[2],
-		EmployeeBankAccount:obj[3]
+		EmployeeBankAccount:obj[3],
+		Payments:obj[4]
 	}
 		return object;
 }
