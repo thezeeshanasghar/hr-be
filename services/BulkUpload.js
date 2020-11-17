@@ -18,7 +18,7 @@ const BulkUpload = async (req, res) => {
 			if (err) {
 				return err;
 			} else {
-				SaveRecord(result, req.body.Type);
+				SaveRecord(result, req.body.Type,req.body.Company);
 			}
 			res.send(result.length.toString());
 			res.status(200);
@@ -56,7 +56,7 @@ const fileUpload = async (req, res) => {
 	})
 }
 
-const SaveRecord = async (result, Type) => {
+const SaveRecord = async (result, Type,Company) => {
 
 	//Send To DB
 	var query = "";
@@ -205,7 +205,7 @@ const SaveRecord = async (result, Type) => {
 				query = `
 				declare @Count int =0,@CompanyId bigint = 0 ;
 				select @Count=COUNT(*) from [dbo].[Grade] where Code ='`+ obj[i].code + `';
-				select @CompanyId=Id from [dbo].[Company] where Code ='`+ obj[i].companycode + `';
+				set @CompanyId='`+Company+`';
 				if(not @CompanyId = 0)
 				begin
 				IF(@Count=0)	
@@ -230,7 +230,7 @@ const SaveRecord = async (result, Type) => {
 				query = `
 					declare @Count int =0,@CompanyId bigint = 0 ;
 					select @Count=COUNT(*) from [dbo].[Unit] where Code ='`+ obj[i].code + `';
-					select @CompanyId=Id from [dbo].[Company] where Code ='`+ obj[i].companycode + `';
+					set @CompanyId='`+Company+`';
 					if(not @CompanyId = 0)
 					begin
 					IF(@Count=0)	
@@ -257,7 +257,7 @@ const SaveRecord = async (result, Type) => {
 						select @UnitId = Id from [dbo].[Unit] where Code = '`+ obj[i].unit + `';
 						select @JobId = Id from [dbo].[Jobs] where Code = '`+ obj[i].job + `'
 						select @Count=Count(*) from [dbo].[Positions] where Code = '`+ obj[i].code + `';
-						select @CompanyId=Id from [dbo].[Company] where Code = '`+ obj[i].company + `';
+						set @CompanyId='`+Company+`';
 						if(not @UnitId = 0 and not @JobId = 0 and not @CompanyId = 0)
 						begin
 
@@ -283,7 +283,7 @@ const SaveRecord = async (result, Type) => {
 				query = `
 						declare @Count int =0,@CompanyId bigint = 0 ;
 						select @Count=COUNT(*) from [dbo].[Jobs] where Code ='`+ obj[i].code + `';
-						select @CompanyId=Id from [dbo].[Company] where Code ='`+ obj[i].company + `';
+						set @CompanyId='`+Company+`';
 						if(not @CompanyId = 0)
 						begin
 						IF(@Count=0)	
@@ -318,7 +318,7 @@ const SaveRecord = async (result, Type) => {
 					select @EmployeeStatus = Id from [myuser].[LookupItems] where Name='`+ obj[i].employeestatus + `'
 					select @PartTimeStatus = Id from [myuser].[LookupItems] where Name='`+ obj[i].parttimestatus + `'
 					select @Title = Id from [myuser].[LookupItems] where Name='`+ obj[i].title + `'
-					select @Company=Id from [dbo].[Company] where Code = '`+ obj[i].company + `'
+					set @Company='`+Company+`';
 					if(not @Postion = 0 and not @Grade = 0 and not @Gender = 0 and not @MaritalStatus = 0 and  not @ContactType = 0
   					and not @Country = 0 and not @EmployeeStatus = 0 and  not @PartTimeStatus = 0 and not @Company = 0 and not @Title = 0)
   					begin
@@ -369,7 +369,7 @@ const SaveRecord = async (result, Type) => {
 				select @Bank=Id from [dbo].[Bank] where [BranchCode] ='`+ obj[i].branch + `';
 				select @Currency=Id from [myuser].[LookupItems] where Name ='`+ obj[i].currency + `';
 				select @Count=count(*) from [dbo].[EmployeeBankAccount] where IBAN ='`+ obj[i].iban + `'  and EmployeeId =@EmployeeId;
-				select @CompanyId=Id from [dbo].[Company] where Code  ='`+ obj[i].company + `';
+				set @CompanyId='`+Company+`';
 				if(not  @EmployeeId = 0 and not @Bank = 0 and not @Currency = 0 and not @CompanyId = 0)
 				begin
 				if(@Count = 0)
@@ -400,7 +400,7 @@ const SaveRecord = async (result, Type) => {
 				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]='`+ obj[i].employee + `';
 				select @Currency=Id from [myuser].[LookupItems] where Name ='`+ obj[i].currency + `';
 				select @Entitlement=Id from [myuser].[LookupItems] where Name ='`+ obj[i].entitlement + `';
-				select @CompanyId=Id from [dbo].[Company] where [Code]  ='`+ obj[i].company + `';
+				set @CompanyId='`+Company+`';
 				select @Count=Count(*) from [myuser].[PeriodicPayElements] where PayelementId = @PayElement and EmployeeId =@EmployeeId
 				if(not @PayElement = 0 and not @Currency = 0 and not @EmployeeId = 0)
 				begin
@@ -435,7 +435,7 @@ const SaveRecord = async (result, Type) => {
 				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]='`+ obj[i].employee + `';
 				select @Currency=Id from [myuser].[LookupItems] where Name ='`+ obj[i].currency + `';
 				select @Entitlement=Id from [myuser].[LookupItems] where Name ='`+ obj[i].entitlement + `';
-				select @CompanyId=Id from [dbo].[Company] where [Code]  ='`+ obj[i].company + `';
+				set @CompanyId='`+Company+`';
 				select @Count=Count(*) from [myuser].[OnetimeElement] where PayelementId = @PayElement and EmployeeId =@EmployeeId
 				if(not @PayElement = 0 and not @Currency = 0 and not @EmployeeId = 0)
 				begin
@@ -482,7 +482,7 @@ const SaveRecord = async (result, Type) => {
 				query = `
 				select * from [dbo].[unpaidLeaves]
 				declare @Count int = 0, @Company bigint = 0 , @EmployeeId bigint = 0;
-				select @Company = Id from  [dbo].[Company] where Code = '`+ obj[i].company + `';
+				set @Company='`+Company+`';
 				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode] = '`+ obj[i].employee + `';
 				select @Count=Count(*) from [dbo].[unpaidLeaves] where EmployeeId = @EmployeeId AND LeaveStartDate<='' AND LeaveEndDate>='';
 				if(not @Company = 0 and not @EmployeeId = 0 )
@@ -500,7 +500,7 @@ const SaveRecord = async (result, Type) => {
 				query = `
 				declare @Count int =0,@CompanyId bigint = 0 ;
 				select @Count=COUNT(*) from [dbo].[CostCenter] where Code ='`+ obj[i].code + `';
-				select @CompanyId=Id from [dbo].[Company] where Code ='`+ obj[i].company + `';
+				set @CompanyId='`+Company+`';
 				if(not @CompanyId = 0)
 				begin
 				IF(@Count=0)	
@@ -524,7 +524,7 @@ const SaveRecord = async (result, Type) => {
 				query = `
 				declare @Count int =0,@CompanyId bigint = 0 ;
 				select @Count=COUNT(*) from [dbo].[GLAccount] where Account ='`+ obj[i].account + `';
-				select @CompanyId=Id from [dbo].[Company] where Code ='`+ obj[i].company + `';
+				set @CompanyId='`+Company+`';
 				if(not @CompanyId = 0)
 				begin
 				IF(@Count=0)	
@@ -551,8 +551,7 @@ const SaveRecord = async (result, Type) => {
 				select @GlAccount=Id from [dbo].[GLAccount] where Account='`+ obj[i].glaccount + `';
 				select @CostCenter=Id from [dbo].[CostCenter] where Code ='`+ obj[i].costcenter + `';
 				select @FinStaffCategory = Id from [myuser].[LookupItems] where Name '`+obj[i].finstaffcategory+`'
-				select @Company=Id from [dbo].[Company] where [Code]='`+ obj[i].company + `';
-				select
+				set @Company='`+Company+`';
 				select @Count=Count(*) from [dbo].[PayElementGlAccount] where PayElementId =@PayElement and GLAccountId =@GlAccount And
 				CostCenterId = @CostCenter;
 				if(not @PayElement = 0 and not @GlAccount = 0 and not @CostCenter = 0 and not @Company = 0)
@@ -577,7 +576,7 @@ const SaveRecord = async (result, Type) => {
 				select @Days=Id from [myuser].[LookupItems] where Name='`+ obj[i].days + `';
 				select @Month=Id from [myuser].[LookupItems] where Name='`+ obj[i].month + `'
 				select @Increment=Id from [myuser].[LookupItems] where Name='`+ obj[i].entitlement + `'
-				select @Company=Id from [dbo].[Company] where Code ='`+ obj[i].company + `';	
+				set @Company='`+Company+`';	
 				select @Count=Count(*) from [dbo].[PayElement] where Code ='`+ obj[i].code + `';
 				if(not @Group = 0 and not @Periodicity = 0 and not @Currency = 0 and not @Days = 0 and not @Month = 0 and  not @Increment = 0 and
  				not @Company = 0 )
@@ -611,7 +610,7 @@ const SaveRecord = async (result, Type) => {
 				break;
 				case 'Termination':
 					query = `declare @CompanyId bigint = 0 , @EmployeeId bigint = 0, @Count bigint = 0 ;
-					select @CompanyId=Id from  [dbo].[Company] where [Code]='`+obj[i].company+`';
+					set @CompanyId='`+Company+`';
 					select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]= '`+obj[i].employee+`';
 					select @Count = count(*) from [myuser].[EmployeeTermination] where CompanyId = @CompanyId and  EmployeeId = @EmployeeId;
 					if(@Count=0)
@@ -636,7 +635,7 @@ const SaveRecord = async (result, Type) => {
 				case 'overtime':
 					query=`
 					declare @EmployeeId bigint,@CompanyId bigint,@Count int;
-					select @CompanyId=Id from [dbo].[Company] where Code ='`+obj[i].companycode+`';
+					set @CompanyId='`+Company+`';
 					select @EmployeeId=Id from [dbo].[Employees] where EmployeeCode ='`+obj[i].employeecode+`';
 					select @Count=count(*) from  [dbo].[Employeeovertime] where  [Paidon]='`+obj[i].paidon+`' And EmployeeId=@EmployeeId
 					if(@Count=0)
