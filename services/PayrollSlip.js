@@ -125,6 +125,7 @@ const GetPayRollSlip=async (req,res)=>{
 
 const reversePayroll=async (req,res)=>{
 	try {
+		console.log(req.body)
 		var query = 
 		`
 		delete from [myuser].[SalaryPayRoll] where GroupName ='`+req.body.GroupName+`' and CompanyId='`+req.body.Company+`'

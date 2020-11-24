@@ -62,7 +62,7 @@ const GetEmployees = async (req, res) => {
 }
 const GetEmployeesByCompany = async (req, res) => {
 	try {
-		var query = "select * from  Employees where CompanyId = '"+req.params.CompanyId+"' ;";
+		var query = "select * from  Employees where nullif('"+req.params.CompanyId+"' ,'0') is null OR CompanyId = '"+req.params.CompanyId+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -70,7 +70,7 @@ const GetEmployeesByCompany = async (req, res) => {
 					console.log(err)
 				}
 				else {
-					var response = profileset.recordset;
+					var response = {data:profileset.recordset};
 					res.send(response);
 					return ;
 				}
@@ -227,6 +227,7 @@ const InsertEmployee = async (req, res) => {
 		} 
 }
 const UpdateEmployee = async (req, res) => {
+	console.log(req.body);
 	try {  
 		const pool = await poolPromise  
 		const result = await pool.request()
@@ -267,6 +268,7 @@ const UpdateEmployee = async (req, res) => {
 		.input("SalaryStatus", sql.BIGINT,req.body.SalaryStatus)  
 		.input("ApplicableLaws", sql.NVarChar(4000),req.body.ApplicableLaws)  
 		.input("OneTimePayRollDetail", sql.NVARCHAR(4000),req.body.OneTimePayRollDetail)
+		.input("type", sql.VarChar(100),req.body.type)
 		.execute("[dbo].[UpdateEmployee]").then(function (recordSet) { 
 		 res.status(200).json({ status: "Success" })  ;
 		//  return ;
