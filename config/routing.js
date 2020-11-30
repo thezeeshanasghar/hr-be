@@ -22,6 +22,7 @@ const report=require('./../controllers/reportController');
 const bulkUpload=require('./../controllers/BulkUploadController');
 const dashboard=require('./../controllers/dashboardController');
 const Termination=require('./../controllers/TerminationController');
+const Taxable=require('./../controllers/taxable_ElementController');
 const routing=(app)=>{
 app.use('/api', auth);  
 app.use('/api', Bank);  
@@ -47,5 +48,6 @@ app.use('/api', report);
 app.use('/api',bulkUpload);
 app.use('/api',dashboard);
 app.use('/api',Termination);
+app.use('/api',Taxable);
 }
 module.exports=routing;

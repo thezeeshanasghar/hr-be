@@ -127,6 +127,12 @@ const ReversePayroll=PaySlipDefaultPath+"/reversePayroll"
 const specificPayroll=PaySlipDefaultPath+"/specific/:Company";
 const changeStatuspayroll=PaySlipDefaultPath+"/status/:status/:code"
 //#endregion
+
+//#region taxable Element
+const taxabledefaultPath="/taxable";
+const taxableByCompany=defaultPath+"/ByCompany";
+const taxableSecondaryPath=defaultPath+"/:Id"
+//#endregion
 module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryPath,CompanydefaultPath,CompanySelectivePath,CompanySecondaryPath,
 				CostCenterdefaultPath,CostCenterSecondaryPath,CostCenterByCompany,ExchangedefaultPath,ExchangeSecondaryPath,
 				ExchangeByCurrency,BankAccdefaultPath,BankAccSecondaryPath,BankAccByEmployee,EmployeedefaultPath,
@@ -140,4 +146,5 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,EmployeeVarrianceindvReport,
 				BulkUploadPath,FileUpload,DashboardPath,CompaniesCountPath,UsersCountPath,
 				TerminationPrimaryPath,TerminationSecondaryPath,
-				EmployeeAdvanceDetail,oneTimePayRoll,EmployeeSelective,ReversePayroll,specificPayroll,changeStatuspayroll};
+				EmployeeAdvanceDetail,oneTimePayRoll,EmployeeSelective,ReversePayroll,specificPayroll,changeStatuspayroll,
+				taxableByCompany,taxableSecondaryPath,taxabledefaultPath};
