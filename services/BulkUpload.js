@@ -1,4 +1,5 @@
 var exceltojson = require("xlsx-to-json-lc");
+// var exceltojson= require("xls-to-json");
 const { message } = require('../constant/variables');
 var fs = require('fs');
 var multer = require('multer');
@@ -62,45 +63,54 @@ const SaveRecord = async (result, Type,Company) => {
 	var query = "";
 
 	var obj = result;
-	console.log(obj)
+	// console.log(obj,"obj")
+	var check=0;
 	for (var i = 0; i < obj.length; i++) {
-
+	
+		if(check==1){
+			return false;
+		}
 		switch (Type) {
 			case 'Bank':
-				query = `
-							declare @Count int = 0;
-							   select @Count=COUNT(*) from [dbo].[Bank] where [BranchCode] = '`+ obj[i].branchcode + `'
-							   if(@Count = 0)
-							   begin
-									   INSERT INTO [dbo].[Bank]
-									   (BankName, Address, BranchCode, Code, SwiftCode, UAEFTSBANKCode, RouteCode, Description)
-									   VALUES
-									   ('`+ obj[i].bankname + `','` + obj[i].address + `','` + obj[i].branchcode + `',
-									   '` + obj[i].code + `','` + obj[i].swiftcode + `'
-									   ,'` + obj[i].uaeftsbankcode + `','` + obj[i].routecode + `','` + obj[i].description + `');
-							   end
-							   else
-							   begin 
-									   UPDATE  [dbo].[Bank]
-									   SET
-									   BankName = '`+ obj[i].bankname + `',
-									   Address = '`+ obj[i].address + `',
-									   SwiftCode='` + obj[i].swiftcode + `',
-									   UAEFTSBANKCode='` + obj[i].uaeftsbankcode + `',
-									   RouteCode='` + obj[i].routecode + `',
-									   Description='` + obj[i].description + `'
-									   WHERE
-									   BranchCode = '`+ obj[i].branchcode + `';
-									   
-		   
-							   end
-							   `;
-				break;
+				if(obj[i]['bank/ branch code']!="" &&  obj[i]['bank/ branch code'] !="" && obj[i]['swift code'] != ""  && obj[i]['uaefts code']!="" &&  obj[i]['route code']!="" && obj[i]['bank/ branch description']!="" ){
+					query = `
+					declare @Count int = 0;
+					   select @Count=COUNT(*) from [dbo].[Bank] where [BranchCode] = '`+ obj[i]['bank/ branch code'] + `'
+					   if(@Count = 0)
+					   begin
+							   INSERT INTO [dbo].[Bank]
+							   (BankName, Address, BranchCode, Code, SwiftCode, UAEFTSBANKCode, RouteCode, Description)
+							   VALUES
+							   ('`+ obj[i]['bank/ branch description'] + `','` + 'N/A' + `','` + obj[i]['bank/ branch code'] + `',
+							   '` + obj[i]['bank/ branch code'] + `','` + obj[i]['swift code'] + `'
+							   ,'` + obj[i]['uaefts code'] + `','` + obj[i]['route code'] + `','` + obj[i]['bank/ branch description'] + `');
+					   end
+					   else
+					   begin 
+							   UPDATE  [dbo].[Bank]
+							   SET
+							   BankName = '`+ obj[i]['bank/ branch description']+ `',
+							   Address = '`+ 'N/A' + `',
+							   SwiftCode='` + obj[i]['swift code']  + `',
+							   UAEFTSBANKCode='` + obj[i]['uaefts code']+ `',
+							   RouteCode='` + obj[i]['route code']  + `',
+							   Description='` + obj[i]['bank/ branch description']  + `'
+							   WHERE
+							   BranchCode = '`+ obj[i]['bank/ branch code']  + `';
+							   
+   
+					   end
+					   `;
+					//    console.log(query);
+		break;
+				}
+		
 			case 'Company':
-				query = `
+				if(obj[i].code !="" && obj[i].bankcode!=""&& obj[i].currency!=""&& obj[i].countrycode!="" && obj[i].companyname!="" && obj[i].address !="" &&  obj[i].contact !="" &&   obj[i].registrationno!="" && obj[i].email !=""  &&  obj[i].taxationno !="" && obj[i].socialsecurityno !="" &&  obj[i].eobino !=""  ){
+query = `
 				declare @Count int = 0 , @COUNTRYCODE BIGINT = 0 , @BankId bigint = 0 , @CompanyId bigint = 0 , @CurrencyId bigint = 0 , @CompanyId bigint = 0 ;
 				SELECT @Count=COUNT(*) FROM [dbo].[Company] WHERE [Code]='`+ obj[i].code + `';
-				select @BankId=Id from [dbo].[Bank]  WHERE [Code]='`+ obj[i].code + `';
+				select @BankId=Id from [dbo].[Bank]  WHERE [Code]='`+ obj[i].bankcode + `';
 				select @CurrencyId=Id from [myuser].[LookupItems] where Name =  '`+obj[i].currency+`';
 				IF @COUNT=0
 				BEGIN
@@ -136,7 +146,7 @@ const SaveRecord = async (result, Type,Company) => {
 					WHERE 
 					Code='`+ obj[i].code + `'
 
-				select @CompanyId=Id from [dbo].[Company] where Code = '`+ obj[i].cod +`';
+				select @CompanyId=Id from [dbo].[Company] where Code = '`+ obj[i].code +`';
 
 					update [dbo].[CompanyBankAccounts]
 					set
@@ -146,28 +156,34 @@ const SaveRecord = async (result, Type,Company) => {
 				END
 				
 					`
+
+				}
+				
 				break;
 			case 'Exchange':
+				if(obj[i]['currency'] !="" &&  obj[i]['to currency'] !="" && obj[i]['effective date']!="" &&  obj[i].rate !=""){
 				query = `
 				declare @Fromcurrency int = 0 ,@ToCurrency int = 0,@Count int = 0 ; 
-				select @Fromcurrency=Id from [myuser].[LookupItems] where Name = '`+ obj[i].currency + `';
-				select @ToCurrency=Id from [myuser].[LookupItems] where Name = '`+ obj[i].tocurrency + `';
-				select @Count=Count(*) from [dbo].[CurrencyExchange] where [Currency]=@Fromcurrency and [ToCurrency]=@ToCurrency and [EffectiveDate]='`+ obj[i].effectivedate + `';
+				select @Fromcurrency=Id from [myuser].[LookupItems] where Name = '`+ obj[i]['currency'] + `';
+				select @ToCurrency=Id from [myuser].[LookupItems] where Name = '`+ obj[i]['to currency'] + `';
+				select @Count=Count(*) from [dbo].[CurrencyExchange] where [Currency]=@Fromcurrency and [ToCurrency]=@ToCurrency and [EffectiveDate]='`+ obj[i]['effective date'] + `';
 
 				if( Not @Fromcurrency  = 0 AND Not @ToCurrency  = 0  AND @Count= 0 )
 				insert [dbo].[CurrencyExchange]
 				(Currency, Rate, ToCurrency, EffectiveDate)
 				values
-				(@Fromcurrency,'`+ obj[i].rate + `',@ToCurrency,'` + obj[i].effectivedate + `')
+				(@Fromcurrency,'`+ obj[i]['rate'] + `',@ToCurrency,'` + obj[i]['effective date']  + `')
 				else
 				update [dbo].[CurrencyExchange]
 				set
 				Rate='`+ obj[i].rate + `'
 				WHERE
- 				[Currency]=@Fromcurrency and [ToCurrency]=@ToCurrency and [EffectiveDate]='`+ obj[i].effectivedate + `';
+ 				[Currency]=@Fromcurrency and [ToCurrency]=@ToCurrency and [EffectiveDate]='`+ obj[i]['effective date']  + `';
 
 
-				`
+				`	
+				}
+				
 				break;
 			case 'CountryLaw':
 
@@ -202,9 +218,12 @@ const SaveRecord = async (result, Type,Company) => {
 				`
 				break;
 			case 'Grade':
+				if(obj[i]['grade code']!="" &&  obj[i]['grade description'] !="")
+				{
+					console.log(obj[i]);
 				query = `
 				declare @Count int =0,@CompanyId bigint = 0 ;
-				select @Count=COUNT(*) from [dbo].[Grade] where Code ='`+ obj[i].code + `';
+				select @Count=COUNT(*) from [dbo].[Grade] where Code ='`+ obj[i]['grade code'] + `';
 				set @CompanyId='`+Company+`';
 				if(not @CompanyId = 0)
 				begin
@@ -213,23 +232,27 @@ const SaveRecord = async (result, Type,Company) => {
 				INSERT INTO [dbo].[Grade] 
 				(Code, Description, CompanyId)
 				values
-				('`+ obj[i].code + `','` + obj[i].description + `',@CompanyId)
+				('`+  obj[i]['grade code']+ `','` + obj[i]['grade description'] + `',@CompanyId)
 				END
 				else
 				begin
 				update [dbo].[Grade] 
 				set
-				Description='`+ obj[i].description + `'
+				Description='`+  obj[i]['grade description'] + `'
 				where
-				Code='`+ obj[i].code + `'	
+				Code='`+ obj[i]['grade code'] + `'	
 				end
 				end
-				`
+				`	
+				}
+				
 				break
 			case 'Unit':
+				if(obj[i]['unit code'] !="" &&  obj[i]['unit description'] !="")
+				{
 				query = `
 					declare @Count int =0,@CompanyId bigint = 0 ;
-					select @Count=COUNT(*) from [dbo].[Unit] where Code ='`+ obj[i].code + `';
+					select @Count=COUNT(*) from [dbo].[Unit] where Code ='`+ obj[i]['unit code'] + `';
 					set @CompanyId='`+Company+`';
 					if(not @CompanyId = 0)
 					begin
@@ -238,25 +261,27 @@ const SaveRecord = async (result, Type,Company) => {
 					INSERT INTO [dbo].[Unit] 
 					(Code, Name, CompanyId)
 					values
-					('`+ obj[i].code + `','` + obj[i].name + `',@CompanyId)
+					('`+ obj[i]['unit code'] + `','` + obj[i]['unit description'] + `',@CompanyId)
 					END
 					else
 					begin
 					update [dbo].[Unit]
 					set
-					Name='`+ obj[i].name + `'
+					Name='`+ obj[i]['unit description'] + `'
 					where
-					Code='`+ obj[i].code + `'	
+					Code='`+ obj[i]['unit code'] + `'	
 					end
 					end
 					`
+				}
 				break
 			case 'Position':
-				query = `
+				if(obj[i]['unit code'] !="" && obj[i]['job code'] !="" && obj[i]['position code'] !="" && obj[i]['position title'] !=""){
+							query = `
 						declare @Count int = 0,@UnitId bigint = 0 , @JobId bigint = 0,@CompanyId bigint = 0;
-						select @UnitId = Id from [dbo].[Unit] where Code = '`+ obj[i].unit + `';
-						select @JobId = Id from [dbo].[Jobs] where Code = '`+ obj[i].job + `'
-						select @Count=Count(*) from [dbo].[Positions] where Code = '`+ obj[i].code + `';
+						select @UnitId = Id from [dbo].[Unit] where Code = '`+ obj[i]['unit code'] + `';
+						select @JobId = Id from [dbo].[Jobs] where Code = '`+ obj[i]['job code'] + `'
+						select @Count=Count(*) from [dbo].[Positions] where Code = '`+ obj[i]['position code'] + `';
 						set @CompanyId='`+Company+`';
 						if(not @UnitId = 0 and not @JobId = 0 and not @CompanyId = 0)
 						begin
@@ -266,23 +291,27 @@ const SaveRecord = async (result, Type,Company) => {
 						insert into [dbo].[Positions]
 						(UnitId, JobId, Code, Title, CompanyId)
 						values
-						(@UnitId,@JobId,'`+ obj[i].code + `','` + obj[i].title + `',@CompanyId);
+						(@UnitId,@JobId,'`+ obj[i]['position code']  + `','` + obj[i]['position title'] + `',@CompanyId);
 						end
 						else
 						begin
 						update [dbo].[Positions]
 						set
-						UnitId=@UnitId,JobId=@JobId,Title='`+ obj[i].title + `'
+						UnitId=@UnitId,JobId=@JobId,Title='`+ obj[i]['position title'] + `'
 						where
-						Code='`+ obj[i].code + `'
+						Code='`+ obj[i]['position code'] + `'
 						end
 						end
 					`
+				}
+		
 				break;
 			case 'Job':
+				if(obj[i]['job code']!="" &&  obj[i]['job description'] !="")
+				{
 				query = `
 						declare @Count int =0,@CompanyId bigint = 0 ;
-						select @Count=COUNT(*) from [dbo].[Jobs] where Code ='`+ obj[i].code + `';
+						select @Count=COUNT(*) from [dbo].[Jobs] where Code ='`+ obj[i]['job code'] + `';
 						set @CompanyId='`+Company+`';
 						if(not @CompanyId = 0)
 						begin
@@ -291,18 +320,19 @@ const SaveRecord = async (result, Type,Company) => {
 						INSERT INTO [dbo].[Jobs]
 						(Code, Description, CompanyId)
 						values
-						('`+ obj[i].code + `','` + obj[i].description + `',@CompanyId)
+						('`+ obj[i]['job code'] + `','` + obj[i]['job description'] + `',@CompanyId)
 						END
 						else
 						begin
 						update [dbo].[Jobs]
 						set
-						Description='`+ obj[i].description + `'
+						Description='`+ obj[i]['job description'] + `'
 						where
-						Code='`+ obj[i].code + `'	
+						Code='`+ obj[i]['job code'] + `'	
 						end
 						end
 						`
+				}
 				break
 			case 'Employee':
 				query = `
@@ -363,12 +393,13 @@ const SaveRecord = async (result, Type,Company) => {
 						`
 				break;
 			case 'EmployeeBank':
-				query = `
+				if(obj[i]['client employee id']!="" && obj[i]['bank code']!="" && obj[i]['currency code']!="" && obj[i]['iban (or bank account)'] !="" && obj[i]['effective date']!="" &&  obj[i]['primary account']!=""  ){
+					query = `
 				declare @Count int = 0 , @Bank bigint = 0 ,@Currency int  = 0 , @EmployeeId bigint = 0,@CompanyId bigint = 0;
-				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]='`+ obj[i].employeecode + `';
-				select @Bank=Id from [dbo].[Bank] where [BranchCode] ='`+ obj[i].branch + `';
-				select @Currency=Id from [myuser].[LookupItems] where Name ='`+ obj[i].currency + `';
-				select @Count=count(*) from [dbo].[EmployeeBankAccount] where IBAN ='`+ obj[i].iban + `'  and EmployeeId =@EmployeeId;
+				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]='`+ obj[i]['client employee id'] + `';
+				select @Bank=Id from [dbo].[Bank] where [BranchCode] ='`+ obj[i]['bank code'] + `';
+				select @Currency=Id from [myuser].[LookupItems] where Name ='`+ obj[i]['currency code'] + `';
+				select @Count=count(*) from [dbo].[EmployeeBankAccount] where IBAN ='`+ obj[i]['iban (or bank account)'] + `'  and EmployeeId =@EmployeeId;
 				set @CompanyId='`+Company+`';
 				if(not  @EmployeeId = 0 and not @Bank = 0 and not @Currency = 0 and not @CompanyId = 0)
 				begin
@@ -377,64 +408,72 @@ const SaveRecord = async (result, Type,Company) => {
 				insert into [dbo].[EmployeeBankAccount]
 				( CompanyId, BankId, IBAN, EffectiveDate, IsPrimary, CurrencyCode, EmployeeId)
 				values
-				(@CompanyId,@Bank, '`+ obj[i].iban + `','` + obj[i].effectivedate + `','` + obj[i].isprimary + `',@Currency,@EmployeeId);
+				(@CompanyId,@Bank, '`+ obj[i]['iban (or bank account)'] + `','` + obj[i]['effective date'] + `','` + obj[i]['primary account'] + `',@Currency,@EmployeeId);
 				end
 				else 
 				begin
 				update  [dbo].[EmployeeBankAccount]
 				set
 				BankId=@Bank,
-				EffectiveDate='`+ obj[i].effectivedate + `',
-				IsPrimary='`+ obj[i].isprimary + `',
+				EffectiveDate='`+ obj[i]['effective date'] + `',
+				IsPrimary='`+ obj[i]['primary account'] + `',
 				CurrencyCode=@Currency
 				where
-				IBAN='`+ obj[i].iban + `' and EmployeeId=@EmployeeId
+				IBAN='`+ obj[i]['iban (or bank account)'] + `' and EmployeeId=@EmployeeId
 				end
 				end
 				`
+				}
+				
 				break;
 			case 'EmployeePayroll':
-				query = `
+				if( obj[i]['pay element code'] !="" && obj[i]['client employee id'] !="" && obj[i]['currency code']!="" && obj[i]['entitlement/deduction']!="" && obj[i]['start date']!="" && obj[i]['amount'] !="" && obj[i]['frequency']!="" && obj[i]['end date']!="")
+				{
+					query = `
 				declare @PayElement bigint = 0 ,@Currency int = 0, @EmployeeId bigint = 0 ,@Count int = 0 , @CompanyId bigint = 0 , @Entitlement bigint = 0;
-				select @PayElement=Id from [dbo].[PayElement] where Code = '`+ obj[i].payelement + `';
-				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]='`+ obj[i].employee + `';
-				select @Currency=Id from [myuser].[LookupItems] where Name ='`+ obj[i].currency + `';
-				select @Entitlement=Id from [myuser].[LookupItems] where Name ='`+ obj[i].entitlement + `';
+				select @PayElement=Id from [dbo].[PayElement] where Code = '`+ obj[i]['pay element code'] + `';
+				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]='`+ obj[i]['client employee id'] + `';
+				select @Currency=Id from [myuser].[LookupItems] where Name ='`+ obj[i]['currency code'] + `';
+				select @Entitlement=Id from [myuser].[LookupItems] where Name ='`+ obj[i]['entitlement/deduction'] + `';
 				set @CompanyId='`+Company+`';
-				select @Count=Count(*) from [myuser].[PeriodicPayElements] where PayelementId = @PayElement and EmployeeId =@EmployeeId
+				select @Count=Count(*) from [myuser].[OnetimeElement] where PayelementId = @PayElement and EmployeeId =@EmployeeId
 				if(not @PayElement = 0 and not @Currency = 0 and not @EmployeeId = 0)
 				begin
 				if(@Count = 0)
 				begin
-				insert into [myuser].[PeriodicPayElements]	
-				(PayElementId, amount, Currency, StartDate, EndDate, EmployeeId,CompanyId,Frequency,Entitlement)
+				insert into [myuser].[PeriodicPayElements]
+				( [CompanyId], [EmployeeId], [PayElementId], [StartDate], [amount], [Currency], [Frequency], [Entitlement], [EndDate])
 				values
-				(@PayElement,'`+ obj[i].value + `',@Currency,'` + obj[i].startdate + `','` + obj[i].enddate + `',@EmployeeId , @CompanyId , '`+obj[i].frequency+`',@Entitlement);
+				(@CompanyId,@EmployeeId, @PayElement,'` + obj[i]['start date'] + `','`+ obj[i]['amount'] + `',@Currency,'`+ obj[i]['frequency'] + `',@Entitlement,'`+ obj[i]['end date'] + `');
 				end
 				else 
 				begin
 				update [myuser].[PeriodicPayElements]
 				set
-				value='`+ obj[i].value + `',
+				value='`+ obj[i]['amount'] + `',
 				Currency=@Currency,
-				StartDate='`+ obj[i].startdate + `',
-				EndDate='`+ obj[i].enddate + `',
-				Frequency='`+obj[i].frequency+`',
+				StartDate='`+  obj[i]['start date']  + `',
+				Frequency='`+  obj[i]['frequency']  + `',
+				EndDate='`+  obj[i]['end date']   + `',
 				Entitlement = @Entitlement
 				where PayelementId=@PayElement and EmployeeId=@EmployeeId;
 				end
 				end
 				`
+				}
+				
 				break;
 
 				case 'EmployeePayrollOneTime':
-					Id,
+					
+				if(obj[i]['pay element code'] !="" && obj[i]['client employee id'] !="" && obj[i]['currency code'] !="" && obj[i]['entitlement/deduction'] !="" &&  obj[i]['effective date'] !="" &&  obj[i]['amount']!=""){
+				
 				query = `
 				declare @PayElement bigint = 0 ,@Currency int = 0, @EmployeeId bigint = 0 ,@Count int = 0 , @CompanyId bigint = 0 , @Entitlement bigint = 0;
-				select @PayElement=Id from [dbo].[PayElement] where Code = '`+ obj[i].payelement + `';
-				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]='`+ obj[i].employee + `';
-				select @Currency=Id from [myuser].[LookupItems] where Name ='`+ obj[i].currency + `';
-				select @Entitlement=Id from [myuser].[LookupItems] where Name ='`+ obj[i].entitlement + `';
+				select @PayElement=Id from [dbo].[PayElement] where Code = '`+ obj[i]['pay element code'] + `';
+				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]='`+ obj[i]['client employee id'] + `';
+				select @Currency=Id from [myuser].[LookupItems] where Name ='`+ obj[i]['currency code'] + `';
+				select @Entitlement=Id from [myuser].[LookupItems] where Name ='`+ obj[i]['entitlement/deduction'] + `';
 				set @CompanyId='`+Company+`';
 				select @Count=Count(*) from [myuser].[OnetimeElement] where PayelementId = @PayElement and EmployeeId =@EmployeeId
 				if(not @PayElement = 0 and not @Currency = 0 and not @EmployeeId = 0)
@@ -442,25 +481,28 @@ const SaveRecord = async (result, Type,Company) => {
 				if(@Count = 0)
 				begin
 				insert into [myuser].[OnetimeElement]
-				( CompanyId, EmployeeId, PayElementId, EffectiveDate, Amount, Currency, Entitlement)
+				([CompanyId], [EmployeeId], [PayElementId], [EffectiveDate], [Amount], [Currency], [Entitlement])
 				values
-				(@CompanyId,@EmployeeId, @PayElement,'` + obj[i].effectivedate + `','`+ obj[i].value + `',@Currency,@Entitlement);
+				(@CompanyId,@EmployeeId, @PayElement,'` + obj[i]['effective date'] + `','`+ obj[i]['amount'] + `',@Currency,@Entitlement);
 				end
 				else 
 				begin
 				update [myuser].[OnetimeElement]
 				set
-				value='`+ obj[i].value + `',
+				[Amount]='`+ obj[i]['amount'] + `',
 				Currency=@Currency,
-				EffectiveDate='`+ obj[i].effectivedate + `',
+				EffectiveDate='`+  obj[i]['effective date']  + `',
 				Entitlement = @Entitlement
 				where PayelementId=@PayElement and EmployeeId=@EmployeeId;
 				end
 				end
 				`
+				}
+
 				break;
 
 			case 'ApplicableLaws':
+				if(obj[i].law!="" && obj[i].employee!=""){
 				query = `
 				declare @Count int = 0,@Law bigint = 0,@Employee bigint = 0 ;
 				select @Law =Id  from [dbo].[CountryLaws] where Detail = '`+ obj[i].law + `';
@@ -476,14 +518,17 @@ const SaveRecord = async (result, Type,Company) => {
  				(@Law,@Employee)
 				end
 				end
-				`
+				`	
+				}
+				
 				break;
 			case 'UnpaidLeaves':
-				query = `
+				if(obj[i]['client employee id']!="" && obj[i]['unpaid leave start date'] !="" && obj[i]['unpaid leave end date'] !=""  ){
+						query = `
 				select * from [dbo].[unpaidLeaves]
 				declare @Count int = 0, @Company bigint = 0 , @EmployeeId bigint = 0;
 				set @Company='`+Company+`';
-				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode] = '`+ obj[i].employee + `';
+				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode] = '`+ obj[i]['client employee id'] + `';
 				select @Count=Count(*) from [dbo].[unpaidLeaves] where EmployeeId = @EmployeeId AND LeaveStartDate<='' AND LeaveEndDate>='';
 				if(not @Company = 0 and not @EmployeeId = 0 )
 				begin
@@ -492,14 +537,17 @@ const SaveRecord = async (result, Type,Company) => {
 				insert into [dbo].[unpaidLeaves]
 				(CompanyId, EmployeeId, LeaveStartDate, LeaveEndDate)	
 				values
-				(@Company,@EmployeeId,'`+ obj[i].leavestartdate + `','` + obj[i].leaveenddate + `');
+				(@Company,@EmployeeId,'`+ obj[i]['unpaid leave start date'] + `','` + obj[i]['unpaid leave end date'] + `');
 				end
 				end
 				`
+				}
+			
 			case 'CostCenter':
-				query = `
+				if(obj[i]['cost center code']!="" && obj[i]['cost center description']!=""){
+					query = `
 				declare @Count int =0,@CompanyId bigint = 0 ;
-				select @Count=COUNT(*) from [dbo].[CostCenter] where Code ='`+ obj[i].code + `';
+				select @Count=COUNT(*) from [dbo].[CostCenter] where Code ='`+ obj[i]['cost center code'] + `';
 				set @CompanyId='`+Company+`';
 				if(not @CompanyId = 0)
 				begin
@@ -508,22 +556,25 @@ const SaveRecord = async (result, Type,Company) => {
 				INSERT INTO [dbo].[CostCenter]
 				(Code, Description, CompanyId)
 				values
-				('`+ obj[i].code + `','` + obj[i].description + `',@CompanyId)
+				('`+ obj[i]['cost center code'] + `','` + obj[i]['cost center description'] + `',@CompanyId)
 				END
 				else
 				begin
 				update [dbo].[CostCenter]
 				set
-				Description='`+ obj[i].description + `'
+				Description='`+ obj[i]['cost center description'] + `'
 				where
-				Code='`+ obj[i].code + `'	
+				Code='`+ obj[i]['cost center code'] + `'	
 				end
 				end`
+				}
+				
 				break;
 			case 'GlAccount':
+				if(obj[i]['account #']!="" && obj[i]['account description']!=""){
 				query = `
 				declare @Count int =0,@CompanyId bigint = 0 ;
-				select @Count=COUNT(*) from [dbo].[GLAccount] where Account ='`+ obj[i].account + `';
+				select @Count=COUNT(*) from [dbo].[GLAccount] where Account ='`+ obj[i]['account #'] + `';
 				set @CompanyId='`+Company+`';
 				if(not @CompanyId = 0)
 				begin
@@ -532,25 +583,27 @@ const SaveRecord = async (result, Type,Company) => {
 				INSERT INTO [dbo].[GLAccount]
 				(Account, Description, CompanyId)
 				values
-				('`+ obj[i].account + `','` + obj[i].description + `',@CompanyId)
+				('`+ obj[i]['account #'] + `','` + obj[i]['account description'] + `',@CompanyId)
 				END
 				else
 				begin
 				update [dbo].[GLAccount]
 				set
-				Description='`+ obj[i].description + `'
+				Description='`+ obj[i]['account description'] + `'
 				where
-				Account='`+ obj[i].account + `'	
+				Account='`+ obj[i]['account #'] + `'	
 				end
 				end`
+				}
 				break;
 			case 'PayElementGlAccount':
+				if(obj[i]['element code'] !="" && obj[i]['account #'] !="" && obj[i]['fixed cost center code'] !="" && obj[i]['fin staff category'] !="" && obj[i]['posting per employee'] !=""  )
 				query = `
 				declare  @Count int = 0 , @PayElement int = 0 ,@GlAccount int = 0 ,@CostCenter int = 0 ,@Company bigint = 0 , @FinStaffCategory bigint = 0;
-				select @PayElement=Id from [dbo].[PayElement] where Code ='`+ obj[i].payelement + `';
-				select @GlAccount=Id from [dbo].[GLAccount] where Account='`+ obj[i].glaccount + `';
-				select @CostCenter=Id from [dbo].[CostCenter] where Code ='`+ obj[i].costcenter + `';
-				select @FinStaffCategory = Id from [myuser].[LookupItems] where Name '`+obj[i].finstaffcategory+`'
+				select @PayElement=Id from [dbo].[PayElement] where Code ='`+ obj[i]['element code'] + `';
+				select @GlAccount=Id from [dbo].[GLAccount] where Account='`+ obj[i]['account #'] + `';
+				select @CostCenter=Id from [dbo].[CostCenter] where Code ='`+ obj[i]['fixed cost center code'] + `';
+				select @FinStaffCategory = Id from [myuser].[LookupItems] where Name '`+obj[i]['fin staff category']+`'
 				set @Company='`+Company+`';
 				select @Count=Count(*) from [dbo].[PayElementGlAccount] where PayElementId =@PayElement and GLAccountId =@GlAccount And
 				CostCenterId = @CostCenter;
@@ -561,23 +614,24 @@ const SaveRecord = async (result, Type,Company) => {
 				insert into [dbo].[PayElementGlAccount] 
 				(PayElementId, GLAccountId, CostCenterPosting, CostCenterId, PostingPerEmployee,FinStaffCategory)
 				values
-				(@PayElement,@GlAccount,'`+ obj[i].costcenterposting + `',@CostCenter,'` + obj[i].postingperemployee + `' , @FinStaffCategory);
+				(@PayElement,@GlAccount,'`+ obj[i]['fixed cost center code'] + `',@CostCenter,'` + obj[i]['posting per employee'] + `' , @FinStaffCategory);
 				end
 				end
 				`
 				break;
 			case 'PayElement':
-				query = `
+				if(obj[i]['element group'] !="" &&  obj[i]['periodicity'] !="" && obj[i]['default currency code']!="" && obj[i]['# days/ month (Prorata option)']!="" && obj[i]['entitlement/deduction'] !="" && obj[i]['element code'] !="" &&  obj[i]['element description']!="" && obj[i]['lumpsum or prorata']!="" && obj[i]['frequency']!="" ){
+							query = `
 				declare @Group int = 0, @Periodicity int =0 ,@Currency int = 0, @Days int = 0 ,@Month int = 0 ,@Increment int =0 ,
 				@Company int = 0,@Count int =0;
-				select @Group=Id from [myuser].[LookupItems] where Name='`+ obj[i].group + `'
-				select @Periodicity=Id from [myuser].[LookupItems] where Name='`+ obj[i].periodicity + `'
-				select @Currency=Id from [myuser].[LookupItems] where Name='`+ obj[i].currency + `';
-				select @Days=Id from [myuser].[LookupItems] where Name='`+ obj[i].days + `';
-				select @Month=Id from [myuser].[LookupItems] where Name='`+ obj[i].month + `'
-				select @Increment=Id from [myuser].[LookupItems] where Name='`+ obj[i].entitlement + `'
+				select @Group=Id from [myuser].[LookupItems] where Name='`+ obj[i]['element group'] + `'
+				select @Periodicity=Id from [myuser].[LookupItems] where Name='`+ obj[i]['periodicity'] + `'
+				select @Currency=Id from [myuser].[LookupItems] where Name='`+ obj[i]['default currency code'] + `';
+				select @Days=Id from [myuser].[LookupItems] where Name='`+ obj[i]['# days/ month (Prorata option)'] + `';
+				select @Month=Id from [myuser].[LookupItems] where Name='`+ obj[i]['# days/ month (Prorata option)'] + `';
+				select @Increment=Id from [myuser].[LookupItems] where Name='`+ obj[i]['entitlement/deduction'] + `'
 				set @Company='`+Company+`';	
-				select @Count=Count(*) from [dbo].[PayElement] where Code ='`+ obj[i].code + `';
+				select @Count=Count(*) from [dbo].[PayElement] where Code ='`+  obj[i]['element code']  + `';
 				if(not @Group = 0 and not @Periodicity = 0 and not @Currency = 0 and not @Days = 0 and not @Month = 0 and  not @Increment = 0 and
  				not @Company = 0 )
 				 begin
@@ -586,32 +640,35 @@ const SaveRecord = async (result, Type,Company) => {
  				insert into [dbo].[PayElement]( Code, Description, GroupId, Periodicity, CurrencyCode,
  				lumpsum, noofDays, ofMonth, CompanyId, Increment , Frequency)
  				values
- 				('`+ obj[i].code + `','` + obj[i].description + `',@Group,@Periodicity,@Currency,'` + obj[i].lumpsum + `',@Days,@Month,@Company,@Increment , '`+obj[i].frequency+`' )
+ 				('`+ obj[i]['element code'] + `','` + obj[i]['element description'] + `',@Group,@Periodicity,@Currency,'` + obj[i]['lumpsum or prorata'] + `',@Days,@Month,@Company,@Increment , '`+obj[i]['frequency']+`' )
  				end
  				else
  				begin
  				update [dbo].[PayElement]
  				set
- 				Description='`+ obj[i].description + `',
+ 				Description='`+ obj[i]['element description'] + `',
  				GroupId=@Group,
  				Periodicity=@Periodicity,
  				CurrencyCode=@Currency,
- 				lumpsum='`+ obj[i].lumpsum + `',
+ 				lumpsum='`+ obj[i]['lumpsum or prorata'] + `',
  				noofDays=@Days,
  				ofMonth=@Month,
  				CompanyId=@Company,
 				 Increment=@Increment ,
-				 Frequency= '`+obj[i].frequency+`'
+				 Frequency= '`+obj[i]['frequency']+`'
 				 where
- 				Code='`+ obj[i].code + `'
+ 				Code='`+ obj[i]['element code']+ `'
 				end
  				end
 				`
+				}
+		
 				break;
 				case 'Termination':
+					if(obj[i]['client employee id']!="" && obj[i]['last working day']!="" && obj[i]['termination reason']!="")
 					query = `declare @CompanyId bigint = 0 , @EmployeeId bigint = 0, @Count bigint = 0 ;
 					set @CompanyId='`+Company+`';
-					select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]= '`+obj[i].employee+`';
+					select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]= '`+obj[i]['client employee id']+`';
 					select @Count = count(*) from [myuser].[EmployeeTermination] where CompanyId = @CompanyId and  EmployeeId = @EmployeeId;
 					if(@Count=0)
 					begin
@@ -619,20 +676,21 @@ const SaveRecord = async (result, Type,Company) => {
 					insert into [myuser].[EmployeeTermination] 
 					(CompanyId, EmployeeId, LastWorkingDate, TerminationReason)
 					values
-					(@CompanyId,@EmployeeId,'`+obj[i].lastworkingdate+`','`+obj[i].terminationreason+`');
+					(@CompanyId,@EmployeeId,'`+obj[i]['last working day']+`','`+obj[i]['termination reason']+`');
 					
 					end
 					else
 					begin
 					update [myuser].[EmployeeTermination] 
 					set
-					LastWorkingDate = '`+obj[i].lastworkingdate+`',
-					TerminationReason='`+obj[i].terminationreason+`'
+					LastWorkingDate = '`+obj[i]['last working day']+`',
+					TerminationReason='`+obj[i]['termination reason']+`'
 					where CompanyId = @CompanyId and  EmployeeId = @EmployeeId;
 					end
 					`
 					break;
 				case 'overtime':
+					if(obj[i].employeecode !="" && obj[i].overtimepayment !="" && obj[i].paidon!=""  )
 					query=`
 					declare @EmployeeId bigint,@CompanyId bigint,@Count int;
 					set @CompanyId='`+Company+`';
@@ -653,14 +711,39 @@ const SaveRecord = async (result, Type,Company) => {
 					[EmployeeId]=@EmployeeId
 					end
 					`;
-					console.log(query);
+					// console.log(query);
 					break;	
+
+					case 'wagesProtection':
+						if(obj[i].labourid !=""  && obj[i].country!=""  )
+						query=`
+						declare @EmployeeId bigint,@CompanyId bigint,@Count int;
+						set @CompanyId='`+Company+`';
+						select @EmployeeId=Id from [dbo].[Employees] where EmployeeCode ='`+obj[i].employeecode+`';
+						select @Count=count(*) from  [dbo].[Employeeovertime] where  [Paidon]='`+obj[i].paidon+`' And EmployeeId=@EmployeeId
+						if(@Count=0)
+						begin
+						insert into myuser.WagesProtection( [EmployeeId], [OvertimeAmount], [Paidon], [CompanyId])
+						values(@EmployeeId,'`+obj[i].overtimepayment+`','`+obj[i].paidon+`',@CompanyId);
+						end 
+						else
+						begin
+						update myuser.WagesProtection
+						set
+						[OvertimeAmount]='`+obj[i].overtimepayment+`',
+						[Paidon]='`+obj[i].paidon+`'
+						where
+						[EmployeeId]=@EmployeeId
+						end
+						`;
+						// console.log(query);
+						break;	
 			default:
 
 				break;
 
 		}
-		console.log(query);
+		// console.log(query);
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
