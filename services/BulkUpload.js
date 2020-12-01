@@ -408,6 +408,9 @@ query = `
 				if(obj[i]['client employee id']!="" && obj[i]['bank code']!="" && obj[i]['currency code']!="" && obj[i]['iban (or bank account)'] !="" && obj[i]['effective date']!="" &&  obj[i]['primary account']!=""  ){
 					query = `
 				declare @Count int = 0 , @Bank bigint = 0 ,@Currency int  = 0 , @EmployeeId bigint = 0,@CompanyId bigint = 0;
+				select @CompanyId=Id from Company where Code='`+obj[i]['Company Code']+`'
+				if(@CompanyId='`+Company+`')
+				begin
 				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]='`+ obj[i]['client employee id'] + `';
 				select @Bank=Id from [dbo].[Bank] where [BranchCode] ='`+ obj[i]['bank code'] + `';
 				select @Currency=Id from [myuser].[LookupItems] where Name ='`+ obj[i]['currency code'] + `';
@@ -434,6 +437,7 @@ query = `
 				IBAN='`+ obj[i]['iban (or bank account)'] + `' and EmployeeId=@EmployeeId
 				end
 				end
+				end
 				`
 				}
 				
@@ -443,6 +447,9 @@ query = `
 				{
 					query = `
 				declare @PayElement bigint = 0 ,@Currency int = 0, @EmployeeId bigint = 0 ,@Count int = 0 , @CompanyId bigint = 0 , @Entitlement bigint = 0;
+				select @CompanyId=Id from Company where Code='`+obj[i]['Company Code']+`'
+				if(@CompanyId='`+Company+`')
+				begin
 				select @PayElement=Id from [dbo].[PayElement] where Code = '`+ obj[i]['pay element code'] + `';
 				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]='`+ obj[i]['client employee id'] + `';
 				select @Currency=Id from [myuser].[LookupItems] where Name ='`+ obj[i]['currency code'] + `';
@@ -471,6 +478,7 @@ query = `
 				where PayelementId=@PayElement and EmployeeId=@EmployeeId;
 				end
 				end
+				end
 				`
 				}
 				
@@ -482,6 +490,9 @@ query = `
 				
 				query = `
 				declare @PayElement bigint = 0 ,@Currency int = 0, @EmployeeId bigint = 0 ,@Count int = 0 , @CompanyId bigint = 0 , @Entitlement bigint = 0;
+				select @CompanyId=Id from Company where Code='`+obj[i]['Company Code']+`'
+				if(@CompanyId='`+Company+`')
+				begin
 				select @PayElement=Id from [dbo].[PayElement] where Code = '`+ obj[i]['pay element code'] + `';
 				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]='`+ obj[i]['client employee id'] + `';
 				select @Currency=Id from [myuser].[LookupItems] where Name ='`+ obj[i]['currency code'] + `';
@@ -506,6 +517,7 @@ query = `
 				EffectiveDate='`+  obj[i]['effective date']  + `',
 				Entitlement = @Entitlement
 				where PayelementId=@PayElement and EmployeeId=@EmployeeId;
+				end
 				end
 				end
 				`
@@ -537,8 +549,11 @@ query = `
 			case 'UnpaidLeaves':
 				if(obj[i]['client employee id']!="" && obj[i]['unpaid leave start date'] !="" && obj[i]['unpaid leave end date'] !=""  ){
 						query = `
-				select * from [dbo].[unpaidLeaves]
-				declare @Count int = 0, @Company bigint = 0 , @EmployeeId bigint = 0;
+						declare @Count int = 0, @Company bigint = 0 , @EmployeeId bigint = 0;
+						select @Company=Id from Company where Code='`+obj[i]['Company Code']+`'
+				if(@Company='`+Company+`')
+				begin
+			
 				set @Company='`+Company+`';
 				select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode] = '`+ obj[i]['client employee id'] + `';
 				select @Count=Count(*) from [dbo].[unpaidLeaves] where EmployeeId = @EmployeeId AND LeaveStartDate<='' AND LeaveEndDate>='';
@@ -550,6 +565,7 @@ query = `
 				(CompanyId, EmployeeId, LeaveStartDate, LeaveEndDate)	
 				values
 				(@Company,@EmployeeId,'`+ obj[i]['unpaid leave start date'] + `','` + obj[i]['unpaid leave end date'] + `');
+				end
 				end
 				end
 				`
@@ -612,6 +628,9 @@ query = `
 				if(obj[i]['element code'] !="" && obj[i]['account #'] !="" && obj[i]['fixed cost center code'] !="" && obj[i]['fin staff category'] !="" && obj[i]['posting per employee'] !=""  )
 				query = `
 				declare  @Count int = 0 , @PayElement int = 0 ,@GlAccount int = 0 ,@CostCenter int = 0 ,@Company bigint = 0 , @FinStaffCategory bigint = 0;
+				select @Company=Id from Company where Code='`+obj[i]['Company Code']+`'
+				if(@Company='`+Company+`')
+				begin
 				select @PayElement=Id from [dbo].[PayElement] where Code ='`+ obj[i]['element code'] + `';
 				select @GlAccount=Id from [dbo].[GLAccount] where Account='`+ obj[i]['account #'] + `';
 				select @CostCenter=Id from [dbo].[CostCenter] where Code ='`+ obj[i]['fixed cost center code'] + `';
@@ -629,6 +648,7 @@ query = `
 				(@PayElement,@GlAccount,'`+ obj[i]['fixed cost center code'] + `',@CostCenter,'` + obj[i]['posting per employee'] + `' , @FinStaffCategory);
 				end
 				end
+				end
 				`
 				break;
 			case 'PayElement':
@@ -636,6 +656,8 @@ query = `
 							query = `
 				declare @Group int = 0, @Periodicity int =0 ,@Currency int = 0, @Days int = 0 ,@Month int = 0 ,@Increment int =0 ,
 				@Company int = 0,@Count int =0;
+				if('`+obj[i]['Company(Company Name - Country)']+`'='`+Company+`')
+				begin
 				select @Group=Id from [myuser].[LookupItems] where Name='`+ obj[i]['element group'] + `'
 				select @Periodicity=Id from [myuser].[LookupItems] where Name='`+ obj[i]['periodicity'] + `'
 				select @Currency=Id from [myuser].[LookupItems] where Name='`+ obj[i]['default currency code'] + `';
@@ -671,7 +693,8 @@ query = `
 				 where
  				Code='`+ obj[i]['element code']+ `'
 				end
- 				end
+				end
+				end
 				`
 				}
 		
@@ -679,6 +702,9 @@ query = `
 				case 'Termination':
 					if(obj[i]['client employee id']!="" && obj[i]['last working day']!="" && obj[i]['termination reason']!="")
 					query = `declare @CompanyId bigint = 0 , @EmployeeId bigint = 0, @Count bigint = 0 ;
+					select @CompanyId=Id from Company where Code='`+obj[i]['Company Code']+`'
+					if(@CompanyId='`+Company+`')
+					begin
 					set @CompanyId='`+Company+`';
 					select @EmployeeId=Id from [dbo].[Employees] where [EmployeeCode]= '`+obj[i]['client employee id']+`';
 					select @Count = count(*) from [myuser].[EmployeeTermination] where CompanyId = @CompanyId and  EmployeeId = @EmployeeId;
@@ -698,6 +724,7 @@ query = `
 					LastWorkingDate = '`+obj[i]['last working day']+`',
 					TerminationReason='`+obj[i]['termination reason']+`'
 					where CompanyId = @CompanyId and  EmployeeId = @EmployeeId;
+					end
 					end
 					`
 					break;
@@ -727,7 +754,7 @@ query = `
 					break;	
 
 					case 'wagesProtection':
-						if(obj[i].labourid !=""  && obj[i].country!=""  )
+						if(obj[i]['Employer Ministry of Labor ID'] !=""  && obj[i]['Employer Entity Name']!=""  )
 						query=`
 						declare @EmployeeId bigint,@CompanyId bigint,@Count int;
 						set @CompanyId='`+Company+`';
