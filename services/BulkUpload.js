@@ -335,18 +335,27 @@ query = `
 				}
 				break
 			case 'Employee':
-				query = `
+				if(obj[i]['client employee id'] !="" && obj[i]['position code'] !=""  && 
+				obj[i]['grade code'] !="" &&  obj[i].gender !="" && obj[i]['marital status']!="" && obj[i]['contract type']!="" &&  obj[i]['base country code'] !="" &&
+				obj[i]['current employee status code'] !="" &&  obj[i]['part time situation'] !="" && obj[i].title !="" &&  obj[i]['social security /insurance id'] !=""
+				&&  obj[i]['taxation id'] !=""  && obj[i]['national id'] !="" && obj[i]['first name english'] !="" && obj[i]['family name english'] !="" &&  obj[i]['birth date'] !=""
+				&& obj[i]['hire date'] !="" && obj[i]['hiring reason'] !="" && obj[i]['continuous service date'] !="" && obj[i]['probation end date']!="" && obj[i]['part time percentage'] !="" && obj[i]['contract end date']!=""){
+					query = `
 					declare @Count int = 0 , @Postion bigint = 0 , @Grade bigint = 0 , @Gender int = 0 , @MaritalStatus int = 0 ,
-					@ContactType int = 0 ,@Country int = 0 ,@EmployeeStatus int = 0 ,@PartTimeStatus int = 0 ,@Company int = 0,@Title int = 0;
-					select @Count=count(*) from [dbo].[Employees] where EmployeeCode='`+ obj[i].code + `'
-					select @Postion = Id from [dbo].[Positions] where Code ='`+ obj[i].position + `'
-					select @Grade = Id from [dbo].[Grade] where Code ='`+ obj[i].grade + `'
+					@ContactType int = 0 ,@Country int = 0 ,@EmployeeStatus int = 0 ,@PartTimeStatus int = 0 ,@Company int = 0,@Title int = 0,@CompanyId bigint = 0;
+
+					select @CompanyId=Id from Company where Code='`+obj[i]['Company Code']+`'
+					if(@CompanyId = '`+Company+`')
+					begin
+					select @Count=count(*) from [dbo].[Employees] where EmployeeCode='`+ obj[i]['client employee id']  + `'
+					select @Postion = Id from [dbo].[Positions] where Code ='`+ obj[i]['position code'] + `'
+					select @Grade = Id from [dbo].[Grade] where Code ='`+ obj[i]['grade code'] + `'
 					select @Gender = Id from [myuser].[LookupItems] where Name='`+ obj[i].gender + `'
-					select @MaritalStatus = Id from [myuser].[LookupItems] where Name='`+ obj[i].maritalstatus + `'
-					select @ContactType = Id from [myuser].[LookupItems] where Name='`+ obj[i].contacttype + `'
-					select @Country = Id from [myuser].[LookupItems] where Name='`+ obj[i].country + `'
-					select @EmployeeStatus = Id from [myuser].[LookupItems] where Name='`+ obj[i].employeestatus + `'
-					select @PartTimeStatus = Id from [myuser].[LookupItems] where Name='`+ obj[i].parttimestatus + `'
+					select @MaritalStatus = Id from [myuser].[LookupItems] where Name='`+ obj[i]['marital status'] + `'
+					select @ContactType = Id from [myuser].[LookupItems] where Name='`+ obj[i]['contract type'] + `'
+					select @Country = Id from [myuser].[LookupItems] where Name='`+ obj[i]['base country code'] + `'
+					select @EmployeeStatus = Id from [myuser].[LookupItems] where Name='`+ obj[i]['current employee status code'] + `'
+					select @PartTimeStatus = Id from [myuser].[LookupItems] where Name='`+ obj[i]['part time situation'] + `'
 					select @Title = Id from [myuser].[LookupItems] where Name='`+ obj[i].title + `'
 					set @Company='`+Company+`';
 					if(not @Postion = 0 and not @Grade = 0 and not @Gender = 0 and not @MaritalStatus = 0 and  not @ContactType = 0
@@ -360,8 +369,8 @@ query = `
 					PartTimePercentage, ContractEndDate, PositionId, GradeId, Address, Contact,
 					Gender, MaritalStatus, ContractType, Country, CurrentEmployeeStatus, PartTimeSituation, Title, Email)
 					values
-					(@Company,'`+ obj[i].code + `','` + obj[i].insuranceid + `','` + obj[i].taxationid + `','` + obj[i].cnic + `','` + obj[i].firstname + `','` + obj[i].lastname + `','` + obj[i].dob + `',
-					'`+ obj[i].hiredate + `','` + obj[i].hiringreason + `','` + obj[i].servicestartdate + `','` + obj[i].probationenddate + `','` + obj[i].parttimepercentage + `','` + obj[i].contractenddate + `',@Postion,@Grade,
+					(@Company,'`+ obj[i]['client employee id'] + `','` + obj[i]['social security /insurance id'] + `','` + obj[i]['taxation id'] + `','` + obj[i]['national id'] + `','` + obj[i]['first name english'] + `','` + obj[i]['family name english'] + `','` + obj[i]['birth date'] + `',
+					'`+ obj[i]['hire date'] + `','` + obj[i]['hiring reason'] + `','` + obj[i]['continuous service date'] + `','` + obj[i]['probation end date'] + `','` + obj[i]['part time percentage'] + `','` + obj[i]['contract end date'] + `',@Postion,@Grade,
 					'`+ obj[i].address + `','` + obj[i].contact + `',@Gender,@MaritalStatus,@ContactType,
 					@Country,@EmployeeStatus,@PartTimeStatus,@Title,'`+ obj[i].email + `')
   					end
@@ -369,28 +378,31 @@ query = `
   					begin
   					update [dbo].[Employees]
  					 set
-  					InsuranceId='`+ obj[i].insuranceid + `',
-  					TaxationId='`+ obj[i].taxationid + `',
-  					Cnic='`+ obj[i].cnic + `',
-  					FirstName='`+ obj[i].firstname + `',
-					 LastName='`+ obj[i].lastname + `',
-					 DOB='`+ obj[i].dob + `',
-					 HireDate='`+ obj[i].hiredate + `',
-					 HiringReason='`+ obj[i].hiringreason + `',
-					 ServiceStartDate='`+ obj[i].servicestartdate + `',
-					 ProbationEndDate='`+ obj[i].probationenddate + `',
-					 PartTimePercentage='`+ obj[i].parttimepercentage + `',
-					 ContractEndDate='`+ obj[i].contractenddate + `',
+  					InsuranceId='`+ obj[i]['social security /insurance id'] + `',
+  					TaxationId='`+ obj[i]['taxation id']  + `',
+  					Cnic='`+ obj[i]['national id']  + `',
+  					FirstName='`+ obj[i]['first name english'] + `',
+					 LastName='`+ obj[i]['family name english'] + `',
+					 DOB='`+ obj[i]['birth date'] + `',
+					 HireDate='`+ obj[i]['hire date']  + `',
+					 HiringReason='`+ obj[i]['hiring reason'] + `',
+					 ServiceStartDate='`+ obj[i]['continuous service date'] + `',
+					 ProbationEndDate='`+ obj[i]['probation end date'] + `',
+					 PartTimePercentage='`+ obj[i]['part time percentage'] + `',
+					 ContractEndDate='`+ obj[i]['contract end date'] + `',
 					 PositionId=@Postion,GradeId=@Grade,
 					 Address='`+ obj[i].address + `', Contact='` + obj[i].contact + `',
 					Gender=@Gender, MaritalStatus=@MaritalStatus, ContractType=@ContactType, Country=@Country, CurrentEmployeeStatus=@EmployeeStatus,
 					PartTimeSituation=@PartTimeStatus, Title=@Title, Email='`+ obj[i].email + `'
 					where
-					EmployeeCode = '`+ obj[i].code + `';
+					EmployeeCode = '`+ obj[i]['client employee id'] + `';
 
  					end 
-  					end
+					  end
+					  end
 						`
+				
+				}
 				break;
 			case 'EmployeeBank':
 				if(obj[i]['client employee id']!="" && obj[i]['bank code']!="" && obj[i]['currency code']!="" && obj[i]['iban (or bank account)'] !="" && obj[i]['effective date']!="" &&  obj[i]['primary account']!=""  ){
