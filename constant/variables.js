@@ -1,3 +1,5 @@
+const BulkUpload = require("../services/BulkUpload");
+
 const userdefaultPath="/userLogin";
 const userloginPath=userdefaultPath+'/:userName/:userPassword';
 
@@ -107,6 +109,7 @@ const EmployeeVarrianceindvReport="/Report/indevVarriance";
 //#region BulkUpload
 const BulkUploadPath='/bulkupload';
 const FileUpload='/Upload';
+const PostBulkUploadPath=BulkUploadPath+"/data";
 //#endregion
 const message={
 	"success":"Operation successfull",
@@ -144,7 +147,7 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
 				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath,
 				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,EmployeeVarrianceindvReport,
-				BulkUploadPath,FileUpload,DashboardPath,CompaniesCountPath,UsersCountPath,
+				BulkUploadPath,FileUpload,PostBulkUploadPath,DashboardPath,CompaniesCountPath,UsersCountPath,
 				TerminationPrimaryPath,TerminationSecondaryPath,
 				EmployeeAdvanceDetail,oneTimePayRoll,EmployeeSelective,ReversePayroll,specificPayroll,changeStatuspayroll,
 				taxableByCompany,taxableSecondaryPath,taxabledefaultPath};
