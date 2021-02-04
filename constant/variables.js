@@ -96,15 +96,19 @@ const LookupsSecondaryPath="/lookups/:Id";
 //#region country Law
 const CountryLawdefaultPath='/countrylaw';
 const CountryLawSecondaryPath='/countrylaw/:Id';
+const CountryLawByCompanyPath=CountryLawdefaultPath+"/ByCompany/:CompanyId"
 //#endregion
 //#region 
 const PaySlipDefaultPath='/payslip';
+const payrollbyCompany=PaySlipDefaultPath +"/ByCompany/:CompanyId";
 //#endregion
 //#region Reports
-const EmployeeReport='/Report/Employee';
+const EmployeeReport='/Report/Employee/:Id';
 const EmployeepayrollReport='/Report/PayRoll';
 const EmployeeVarrianceReport="/Report/Varriance"
 const EmployeeVarrianceindvReport="/Report/indevVarriance";
+const GTNReport="/Report/GTN";
+const downloadPath="/Download/:Path";
 //#endregion 
 //#region BulkUpload
 const BulkUploadPath='/bulkupload';
@@ -125,10 +129,18 @@ const UsersCountPath="/dashboard/users/Count"
 //#region Termination
 const TerminationPrimaryPath="/termination";
 const TerminationSecondaryPath=TerminationPrimaryPath+"/:Id";
+const TerminationByCompany=TerminationPrimaryPath+"/ByCompany/:CompanyId"
 
 const ReversePayroll=PaySlipDefaultPath+"/reversePayroll"
 const specificPayroll=PaySlipDefaultPath+"/specific/:Company";
 const changeStatuspayroll=PaySlipDefaultPath+"/status/:status/:code"
+
+//#endregion
+//#region Applicable Law
+const ApplicablelawdefaultPath="/CompanyApplicableLaw";
+const ApplicableLawSecondaryPath =ApplicablelawdefaultPath+"/:Id";
+const ApplicableLawByCompany=ApplicablelawdefaultPath+"/ByCompany/:CompanyId";
+
 //#endregion
 
 //#region taxable Element
@@ -146,8 +158,9 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				SocialSecuritydefaultPath,SocialSecuritySecondaryPath,SocialSecurityByCompany,
 				UnitdefaultPath,UnitSecondaryPath,UnitByCompany,UnpaidleavesdefaultPath,UnpaidleavesSecondaryPath,UnpaidleavesByCompany,
 				userProtectiondefaultPath,userProtectionSecondaryPath,userProtectionByCompany,LookupsSecondaryPath,
-				CountryLawdefaultPath,CountryLawSecondaryPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,EmployeeVarrianceindvReport,
+				CountryLawdefaultPath,CountryLawSecondaryPath,CountryLawByCompanyPath,PaySlipDefaultPath,EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,EmployeeVarrianceindvReport,
 				BulkUploadPath,FileUpload,PostBulkUploadPath,DashboardPath,CompaniesCountPath,UsersCountPath,
-				TerminationPrimaryPath,TerminationSecondaryPath,
-				EmployeeAdvanceDetail,oneTimePayRoll,EmployeeSelective,ReversePayroll,specificPayroll,changeStatuspayroll,
-				taxableByCompany,taxableSecondaryPath,taxabledefaultPath};
+				TerminationPrimaryPath,TerminationSecondaryPath,TerminationByCompany,
+				EmployeeAdvanceDetail,oneTimePayRoll,EmployeeSelective,ReversePayroll,specificPayroll,payrollbyCompany,changeStatuspayroll,
+				taxableByCompany,taxableSecondaryPath,taxabledefaultPath,GTNReport,
+				ApplicableLawSecondaryPath,ApplicableLawByCompany,ApplicablelawdefaultPath,downloadPath};

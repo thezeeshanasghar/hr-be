@@ -9,7 +9,9 @@ const GetAllGLAccount = async (req, res) => {
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+		res.send(message.error)
+		return "error";
 				}
 				else {
 					var response = {data:profileset.recordset};
@@ -27,12 +29,14 @@ const GetAllGLAccount = async (req, res) => {
 const GetGLAccountByCompany = async (req, res) => {
 	try {
 		
-		var query = "select * from  GLAccount where CompanyId = '"+req.params.Id+"' ;";
+		var query = "select * from  GLAccount where CompanyId = '"+req.params.CompanyId+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
@@ -54,7 +58,9 @@ const GetGLAccountById = async (req, res) => {
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
@@ -77,7 +83,9 @@ const InsertGLAccount = async (req, res) => {
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
@@ -99,7 +107,9 @@ const UpdateGLAccount = async (req, res) => {
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
@@ -121,7 +131,9 @@ const DeleteGLAccount = async (req, res) => {
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;

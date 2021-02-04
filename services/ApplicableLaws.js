@@ -2,11 +2,9 @@
 const { message } = require('../constant/variables');
 const { poolPromise } = require('../config/db');
 
-const GetAllunpaidLeaves = async (req, res) => {
+const GetAllApplicableLaws = async (req, res) => {
 	try {
-		var query = `select unpaidLeaves.Id, employee.FirstName,company.CompanyName,unpaidLeaves.CompanyId, unpaidLeaves.EmployeeId, format(unpaidLeaves.LeaveStartDate,'dd/MM/yyyy') as LeaveStartDate , format(unpaidLeaves.LeaveEndDate,'dd/MM/yyyy') as LeaveEndDate from  unpaidLeaves 
-					 inner join [dbo].[Company] company on unpaidLeaves.CompanyId=company.Id
-					 inner join [dbo].[Employees] employee on unpaidLeaves.EmployeeId=employee.Id ;`;
+		var query = `select * from [dbo].[Applicable_laws];`;
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -16,9 +14,9 @@ const GetAllunpaidLeaves = async (req, res) => {
 					return "error";
 				}
 				else {
-					var response ={data:profileset.recordset};
+					var response = { data: profileset.recordset };
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -28,36 +26,10 @@ const GetAllunpaidLeaves = async (req, res) => {
 	}
 }
 
-const GetunpaidLeavesByCompany = async (req, res) => {
+const GetApplicableLawsByCompany = async (req, res) => {
 	try {
-		
-		var query = `select unpaidLeaves.Id, employee.FirstName,company.CompanyName,unpaidLeaves.CompanyId, unpaidLeaves.EmployeeId, format(unpaidLeaves.LeaveStartDate,'dd/MM/yyyy') as LeaveStartDate , format(unpaidLeaves.LeaveEndDate,'dd/MM/yyyy') as LeaveEndDate from  unpaidLeaves 
-		inner join [dbo].[Company] company on unpaidLeaves.CompanyId=company.Id
-		inner join [dbo].[Employees] employee on unpaidLeaves.EmployeeId=employee.Id where company.Id = '`+req.params.CompanyId+`' ;`;
-		const pool = await poolPromise
-		const result = await pool.request()
-			.query(query, function (err, profileset) {
-				if (err) {
-					res.status(500)
-		res.send(message.error)
-		return "error";
-				}
-				else {
-					var response = profileset.recordset;
-					res.send(response);
-					return ;
-				}
-			})
-	} catch (err) {
-		res.status(500)
-		res.send(message.error)
-		return "error";
-	}
-}
-const GetunpaidLeavesById = async (req, res) => {
-	
-	try {
-		var query = "select * from unpaidLeaves where Id='"+req.params.Id+"' ;";
+
+		var query = "select * from  [dbo].[Applicable_laws] where CompanyId = '" + req.params.CompanyId + "' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -69,7 +41,31 @@ const GetunpaidLeavesById = async (req, res) => {
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
+const GetApplicableById = async (req, res) => {
+
+	try {
+		var query = "select * from [dbo].[Applicable_laws] where Id='" + req.params.Id + "' ;";
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					res.status(500)
+					res.send(message.error)
+					return "error";
+				}
+				else {
+					var response = profileset.recordset;
+					res.send(response);
+					return;
 				}
 			})
 	} catch (err) {
@@ -79,10 +75,11 @@ const GetunpaidLeavesById = async (req, res) => {
 	}
 }
 
-const InsertunpaidLeaves = async (req, res) => {
+const InsertApplicableLaw = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "Insert into unpaidLeaves(CompanyId, EmployeeId, LeaveStartDate, LeaveEndDate) values('"+req.body.CompanyId+"','"+req.body.EmployeeId+"','"+req.body.LeaveStartDate+"','"+req.body.LeaveEndDate+"');";
+        var query = `Insert into [dbo].[Applicable_laws](LawId, CompanyId, DeductionType, FixedAmount, CompanyCut, EmployeeCut, PayElements) 
+        values('` + req.body.LawId + `','` + req.body.CompanyId + `','` + req.body.DeductionType + `','` + req.body.FixedAmount + `','` + req.body.CompanyCut + `','` + req.body.EmployeeCut + `','` + req.body.PayElements + `');`;
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -94,7 +91,7 @@ const InsertunpaidLeaves = async (req, res) => {
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -103,10 +100,10 @@ const InsertunpaidLeaves = async (req, res) => {
 		return "error";
 	}
 }
-const UpdateunpaidLeaves = async (req, res) => {
+const UpdateApplicableLaw = async (req, res) => {
 	try {
-		
-		var query = "update  unpaidLeaves set CompanyId = '"+req.body.CompanyId+"',EmployeeId = '"+req.body.EmployeeId+"',LeaveStartDate = '"+req.body.LeaveStartDate+"',LeaveEndDate = '"+req.body.LeaveEndDate+"' where Id = '"+req.params.Id+"' ;";
+
+		var query = "update  [dbo].[Applicable_laws] set LawId = '" + req.body.LawId + "',DeductionType = '" + req.body.DeductionType + "',CompanyId = '" + req.body.CompanyId + "',FixedAmount = '" + req.body.FixedAmount + "',CompanyCut = '" + req.body.CompanyCut + "',EmployeeCut = '" + req.body.EmployeeCut + "'PayElements = '" + req.body.PayElements + "' where Id = '" + req.params.Id + "' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -118,7 +115,7 @@ const UpdateunpaidLeaves = async (req, res) => {
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -127,10 +124,11 @@ const UpdateunpaidLeaves = async (req, res) => {
 		return "error";
 	}
 }
-const DeleteunpaidLeaves= async (req, res) => {
+const DeleteApplicableLaw = async (req, res) => {
 	try {
-		console.log(res);
-		var query = "delete from unpaidLeaves where Id in ("+req.params.Id+") ;";
+		console.log(req.params.Id);
+		var query = "delete from [dbo].[Applicable_laws] where Id in (" + req.params.Id + ") ;";
+		console.log(query);
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -142,7 +140,7 @@ const DeleteunpaidLeaves= async (req, res) => {
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -152,5 +150,7 @@ const DeleteunpaidLeaves= async (req, res) => {
 	}
 }
 
-module.exports = { GetAllunpaidLeaves,GetunpaidLeavesByCompany,GetunpaidLeavesById,
-					InsertunpaidLeaves,UpdateunpaidLeaves,DeleteunpaidLeaves};
+module.exports = {
+	GetAllApplicableLaws, GetApplicableLawsByCompany, GetApplicableById,
+	InsertApplicableLaw, UpdateApplicableLaw, DeleteApplicableLaw
+};

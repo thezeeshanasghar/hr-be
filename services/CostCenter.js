@@ -9,12 +9,14 @@ const GetAllCostCenter = async (req, res) => {
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
-					var response = {data:profileset.recordset};
+					var response = { data: profileset.recordset };
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -26,17 +28,19 @@ const GetAllCostCenter = async (req, res) => {
 
 const GetCostCenterByCompany = async (req, res) => {
 	try {
-		var query = "select * from  CostCenter where CompanyId = '"+req.params.CompanyId+"' ;";
+		var query = "select * from  CostCenter where CompanyId = '" + req.params.CompanyId + "' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -47,17 +51,19 @@ const GetCostCenterByCompany = async (req, res) => {
 }
 const GetCostCenterById = async (req, res) => {
 	try {
-		var query = "select * from CostCenter where Id='"+req.params.Id+"' ;";
+		var query = "select * from CostCenter where Id='" + req.params.Id + "' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -70,17 +76,19 @@ const GetCostCenterById = async (req, res) => {
 const InsertCostCenter = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "Insert into CostCenter(Code, Description, CompanyId) values('"+req.body.Code+"','"+req.body.Description+"','"+req.body.CompanyId+"');";
+		var query = "Insert into CostCenter(Code, Description, CompanyId) values('" + req.body.Code + "','" + req.body.Description + "','" + req.body.CompanyId + "');";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -92,17 +100,19 @@ const InsertCostCenter = async (req, res) => {
 const UpdateCostCenter = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "update  CostCenter set Code = '"+req.body.Code+"', Description = '"+req.body.Description+"', CompanyId = '"+req.body.CompanyId+"' where Id = '"+req.params.Id+"'  ;";
+		var query = "update  CostCenter set Code = '" + req.body.Code + "', Description = '" + req.body.Description + "', CompanyId = '" + req.body.CompanyId + "' where Id = '" + req.params.Id + "'  ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -114,17 +124,19 @@ const UpdateCostCenter = async (req, res) => {
 const DeleteCostCenter = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from CostCenter where Id in ("+req.params.Id+") ;";
+		var query = "delete from CostCenter where Id in (" + req.params.Id + ") ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -134,4 +146,4 @@ const DeleteCostCenter = async (req, res) => {
 	}
 }
 
-module.exports = { GetAllCostCenter,GetCostCenterByCompany,GetCostCenterById,InsertCostCenter,UpdateCostCenter,DeleteCostCenter};
+module.exports = { GetAllCostCenter, GetCostCenterByCompany, GetCostCenterById, InsertCostCenter, UpdateCostCenter, DeleteCostCenter };

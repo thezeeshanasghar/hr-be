@@ -123,12 +123,39 @@ const GetPayRollSlip=async (req,res)=>{
 	}
 }
 
+const GetPayRollSlipByCompany=async (req,res)=>{
+	try {
+		console.log(res);
+		var query = `
+		select payroll.[Id], payroll.[EmployeeId], [payables], [taxdeduction], [leavededuct], [paid], payroll.[CompanyId], format([Paidon],'dd/MM/yyyy')  as [Paidon], [PayRollType],emp.FirstName , payroll.PayGroup,payroll.Status from [myuser].[SalaryPayRoll] payroll inner join
+		[dbo].[Employees] emp on emp.Id=payroll.EmployeeId where payroll.[CompanyId] ='`+req.params.CompanyId+`'
+		order by payroll.CompanyId`;
+
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					console.log(err)
+				}
+				else {
+					var response = {data:profileset.recordset};
+					res.send(response);
+					return ;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
+
 const reversePayroll=async (req,res)=>{
 	try {
 		console.log(req.body)
 		var query = 
 		`
-		delete from [myuser].[SalaryPayRoll] where GroupName ='`+req.body.GroupName+`' and CompanyId='`+req.body.Company+`'
+		delete from [myuser].[SalaryPayRoll] where PayGroup ='`+req.body.GroupName+`' and CompanyId='`+req.body.Company+`'
 		update [dbo].[Employeeovertime] set GroupName=NULL where GroupName ='`+req.body.GroupName+`' and CompanyId='`+req.body.Company+`'
 		`;
 
@@ -195,4 +222,4 @@ const changeStatus=async (req,res)=>{
 		return "error";
 	}
 }
-module.exports = { GeneratePayroll,GetPayRollSlip,reversePayroll,getSpecificPayroll,changeStatus};
+module.exports = { GeneratePayroll,GetPayRollSlip,reversePayroll,getSpecificPayroll,changeStatus,GetPayRollSlipByCompany};

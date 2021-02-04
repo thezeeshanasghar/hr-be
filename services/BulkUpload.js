@@ -4,31 +4,55 @@ const { message } = require('../constant/variables');
 var fs = require('fs');
 var multer = require('multer');
 var path = require("path");
+var parser = require('simple-excel-to-json')
 
 const { poolPromise,sql } = require('../config/db');
 const { type } = require("os");
+const changeArrayMapKeys = require('change-array-map-keys')
+
+// const BulkUpload = async (req, res) => {
+// 	try {
+// 		// var response = xlsxConvert();
+// 		exceltojson({
+// 			input: req.body.Path,
+// 			output: "output.json",
+// 			// sheet: "Sheet1",  // specific sheetname inside excel file (if you have multiple sheets)
+// 			lowerCaseHeaders: true
+// 		}, function (err, result) {
+// 			if (err) {
+// 				res.status(500)
+// 				res.send(err)
+// 				return;
+// 			} else {
+// 				//SaveRecord(result, req.body.Type,req.body.Company);
+// 			}
+// 			res.send(result);
+// 			res.status(200);
+// 			return;
+// 		});
+// 		return;
+// 	} catch (err) {
+// 		res.status(500)
+// 		res.send(err)
+// 		return;
+// 	}
+// }
+const excelToJson = require('convert-excel-to-json');
+// const fs = require('fs');
 const BulkUpload = async (req, res) => {
 	try {
 		// var response = xlsxConvert();
-		exceltojson({
-			input: req.body.Path,
-			output: "output.json",
-			// sheet: "Sheet1",  // specific sheetname inside excel file (if you have multiple sheets)
-			lowerCaseHeaders: true
-		}, function (err, result) {
-			if (err) {
-				res.status(500)
-				res.send(err)
-				return;
-			} else {
-				//SaveRecord(result, req.body.Type,req.body.Company);
-			}
-			res.send(result);
-			res.status(200);
-			return;
-		});
-		return;
+
+		// const result = excelToJson({
+		// 	source: fs.readFileSync(req.body.Path)
+		// });
+		var doc = parser.parseXls2Json(req.body.Path ); 
+console.log(doc);
+		res.send(doc[0]);
+		res.status(200);
+	
 	} catch (err) {
+		console.log(err.message)
 		res.status(500)
 		res.send(err)
 		return;

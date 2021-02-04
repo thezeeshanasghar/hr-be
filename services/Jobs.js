@@ -9,7 +9,9 @@ const GetAllJobs = async (req, res) => {
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+		res.send(message.error)
+		return "error";
 				}
 				else {
 					var response = {data:profileset.recordset};
@@ -32,7 +34,9 @@ const GetJobsByCompany = async (req, res) => {
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+		res.send(message.error)
+		return "error";
 				}
 				else {
 					var response = profileset.recordset;
@@ -54,7 +58,9 @@ const GetJobsById = async (req, res) => {
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+		res.send(message.error)
+		return "error";
 				}
 				else {
 					var response = profileset.recordset;
@@ -77,7 +83,9 @@ const InsertJobs = async (req, res) => {
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+		res.send(message.error)
+		return "error";
 				}
 				else {
 					var response = profileset.recordset;
@@ -99,7 +107,9 @@ const UpdateJobs = async (req, res) => {
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
@@ -116,12 +126,14 @@ const UpdateJobs = async (req, res) => {
 const DeleteJobs= async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from Jobs where Id='"+req.params.Id+"' ;";
+		var query = "delete from Jobs where Id in (" + req.params.Id + ")  ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;

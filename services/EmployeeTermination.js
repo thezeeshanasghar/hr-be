@@ -15,7 +15,9 @@
 			const result = await pool.request()
 				.query(query, function (err, profileset) {
 					if (err) {
-						console.log(err)
+						res.status(500)
+						res.send(message.error)
+						return "error";
 					}
 					else {
 						var response = {data:profileset.recordset};
@@ -30,6 +32,36 @@
 		}
 	}
 
+	const GetEmployeeTerminationByCompany = async (req, res) => {
+		try {
+			var query = `
+			select company.[CompanyName],emp.[FirstName],termination.Id, termination.CompanyId, termination.EmployeeId, format(termination.LastWorkingDate,'dd/MM/yyyy') as LastWorkingDate, termination.TerminationReason from [myuser].[EmployeeTermination] termination
+			inner join 
+			[dbo].[Employees]  emp on emp.Id = termination.EmployeeId
+			inner join
+			[dbo].[Company] company on company.Id=termination.CompanyId
+			where company.Id =`+req.params.CompanyId+`
+			`;
+			const pool = await poolPromise
+			const result = await pool.request()
+				.query(query, function (err, profileset) {
+					if (err) {
+						res.status(500)
+						res.send(message.error)
+						return "error";
+					}
+					else {
+						var response = {data:profileset.recordset};
+						res.send(response);
+						return ;
+					}
+				})
+		} catch (err) {
+			res.status(500)
+			res.send(message.error)
+			return "error";
+		}
+	}
 
 	const getEmployeeTerminationById = async (req, res) => {
 		
@@ -39,7 +71,9 @@
 			const result = await pool.request()
 				.query(query, function (err, profileset) {
 					if (err) {
-						console.log(err)
+						res.status(500)
+						res.send(message.error)
+						return "error";
 					}
 					else {
 						var response = profileset.recordset;
@@ -68,7 +102,9 @@
 			const result = await pool.request()
 				.query(query, function (err, profileset) {
 					if (err) {
-						console.log(err)
+						res.status(500)
+			res.send(message.error)
+			return "error";
 					}
 					else {
 						var response = profileset.recordset;
@@ -90,7 +126,9 @@
 			const result = await pool.request()
 				.query(query, function (err, profileset) {
 					if (err) {
-						console.log(err)
+						res.status(500)
+			res.send(message.error)
+			return "error";
 					}
 					else {
 						var response = profileset.recordset;
@@ -112,7 +150,9 @@
 			const result = await pool.request()
 				.query(query, function (err, profileset) {
 					if (err) {
-						console.log(err)
+						res.status(500)
+						res.send(message.error)
+						return "error";
 					}
 					else {
 						var response = profileset.recordset;
@@ -128,4 +168,4 @@
 	}
 
 	module.exports = { GetEmployeeTermination,getEmployeeTerminationById,InsertEmployeeTermination,
-		UpdateEmployeeTermination,DeleteEmployeeTermination};
+		UpdateEmployeeTermination,DeleteEmployeeTermination,GetEmployeeTerminationByCompany};

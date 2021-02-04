@@ -9,12 +9,14 @@ const GetAllUnit = async (req, res) => {
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
-					var response = {data:profileset.recordset};
+					var response = { data: profileset.recordset };
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -26,18 +28,20 @@ const GetAllUnit = async (req, res) => {
 
 const GetUnitByCompany = async (req, res) => {
 	try {
-		
-		var query = "select * from  Unit where CompanyId = '"+req.params.CompanyId+"' ;";
+
+		var query = "select * from  Unit where CompanyId = '" + req.params.CompanyId + "' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -47,19 +51,21 @@ const GetUnitByCompany = async (req, res) => {
 	}
 }
 const GetUnitById = async (req, res) => {
-	
+
 	try {
-		var query = "select * from Unit where Id='"+req.params.Id+"' ;";
+		var query = "select * from Unit where Id='" + req.params.Id + "' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -72,17 +78,19 @@ const GetUnitById = async (req, res) => {
 const InsertUnit = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "Insert into Unit(CompanyId, Code,Name) values('"+req.body.CompanyId+"','"+req.body.Code+"','"+req.body.Description+"');";
+		var query = "Insert into Unit(CompanyId, Code,Name) values('" + req.body.CompanyId + "','" + req.body.Code + "','" + req.body.Name + "');";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -93,18 +101,20 @@ const InsertUnit = async (req, res) => {
 }
 const UpdateUnit = async (req, res) => {
 	try {
-		
-		var query = "update  Unit set CompanyId = '"+req.body.CompanyId+"',Code = '"+req.body.Code+"',Name = '"+req.body.Description+"'  where Id = '"+req.params.Id+"' ;";
+
+		var query = "update  Unit set CompanyId = '" + req.body.CompanyId + "',Code = '" + req.body.Code + "',Name = '" + req.body.Name + "'  where Id = '" + req.params.Id + "' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+					res.send(message.error)
+					return "error";
 				}
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -113,21 +123,23 @@ const UpdateUnit = async (req, res) => {
 		return "error";
 	}
 }
-const DeleteUnit= async (req, res) => {
+const DeleteUnit = async (req, res) => {
 	try {
 		console.log(res);
-		var query = "delete from Unit where Id in ("+req.params.Id +") ;";
+		var query = "delete from Unit where Id in (" + req.params.Id + ") ;";
 		console.log(query);
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
 				if (err) {
-					console.log(err)
+					res.status(500)
+		res.send(message.error)
+		return "error";
 				}
 				else {
 					var response = profileset.recordset;
 					res.send(response);
-					return ;
+					return;
 				}
 			})
 	} catch (err) {
@@ -137,5 +149,7 @@ const DeleteUnit= async (req, res) => {
 	}
 }
 
-module.exports = { GetAllUnit,GetUnitByCompany,GetUnitById,
-					InsertUnit,UpdateUnit,DeleteUnit};
+module.exports = {
+	GetAllUnit, GetUnitByCompany, GetUnitById,
+	InsertUnit, UpdateUnit, DeleteUnit
+};
