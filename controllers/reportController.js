@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const {EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,EmployeeVarrianceindvReport,GTNReport,downloadPath} = require('./../constant/variables')
 const {GetEmployeeReport,GetEmployeePayrollReport,GetEmployeeVarrianceReport,getIndvVarriancereport,GetGTNReport,download} = require('./../services/Report')
-router.get(EmployeeReport, async (req, res) => {
+router.post(EmployeeReport, async (req, res) => {
 	GetEmployeeReport(req, res);
 });
 router.get(EmployeepayrollReport, async (req, res) => {

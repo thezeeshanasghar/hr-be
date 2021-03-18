@@ -10,7 +10,7 @@ const GetEmployeesSelective = async (req, res) => {
 		Id as value , concat(FirstName,' ', LastName) as label   
 		
 		from 
-		[dbo].[Employees] where CompanyId = '`+ req.params.CompanyId + `' ;`;
+		[dbo].[Employees] where CompanyId = '`+ req.params.CompanyId + `' AND NOT CurrentEmployeeStatus=30 ;`;
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -21,7 +21,7 @@ const GetEmployeesSelective = async (req, res) => {
 				}
 				else {
 					var response = profileset.recordset;
-					response.push({ "value": 'All', 'label': 'All' });
+					response.push({'value':'All','label':'All'})
 					res.send(response);
 					return;
 				}
@@ -195,7 +195,6 @@ const GetEmployeeById = async (req, res) => {
 }
 
 const InsertEmployee = async (req, res) => {
-	console.log(req.body, req.body.Title);
 	try {
 
 		const pool = await poolPromise
@@ -222,7 +221,7 @@ const InsertEmployee = async (req, res) => {
 			.input("HiringReason", sql.VarChar(500), req.body.HiringReason)
 			.input("IBAN", sql.VarChar(500), req.body.IBAN)
 			.input("InsuranceId", sql.VarChar(500), req.body.InsuranceId)
-			.input("IsPrimary", sql.BIGINT, req.body.IsPrimary)
+			.input("IsPrimary", sql.VarChar(50), req.body.IsPrimary)
 			.input("LastName", sql.VarChar(500), req.body.LastName)
 			.input("MaritalStatus", sql.BIGINT, req.body.MaritalStatus)
 			.input("PartTimePercentage", sql.Decimal(18, 2), req.body.PartTimePercentage)
@@ -274,7 +273,7 @@ const UpdateEmployee = async (req, res) => {
 			.input("GradeId", sql.BIGINT, req.body.GradeId)
 			.input("HireDate", sql.VarChar(20), req.body.HireDate)
 			.input("HiringReason", sql.VarChar(500), req.body.HiringReason)
-			.input("IBAN", sql.BIGINT, req.body.IBAN)
+			.input("IBAN", sql.VarChar(500), req.body.IBAN)
 			.input("InsuranceId", sql.VarChar(500), req.body.InsuranceId)
 			.input("IsPrimary", sql.VarChar(50), req.body.IsPrimary)
 			.input("LastName", sql.VarChar(500), req.body.LastName)
@@ -333,6 +332,8 @@ const GetEmployeeAdvanceDetail = async (req, res) => {
 
 	try {
 		var query = `select  
+		emp.EmployeeCode,
+		emp.CurrentEmployeeStatus,
 		emp.InsuranceId, 
 		emp.TaxationId,
 		emp.Cnic,
@@ -352,9 +353,9 @@ const GetEmployeeAdvanceDetail = async (req, res) => {
 		from [dbo].[Employees] emp 
 		inner join
 		[dbo].[Company] comp on comp.Id=emp.CompanyId where emp.Id ='`+ req.params.Id + `'
-		select  payele.Code, EmployeeId, PayElementId, format(StartDate, 'dd/MM/yyyy') as StartDate, amount, Currency, Entitlement, format(EndDate,'dd/MM/yyyy') as EndDate,[PaymentDate] from [myuser].[PeriodicPayElements] periodic inner join
+		select  payele.Code, EmployeeId, PayElementId, format(StartDate, 'dd/MM/yyyy') as StartDate, amount, Currency, payele.Increment As MainEntitlement ,Entitlement, format(EndDate,'dd/MM/yyyy') as EndDate,[PaymentDate] from [myuser].[PeriodicPayElements] periodic inner join
 		[dbo].[PayElement] payele on payele.Id = periodic.PayElementId where EmployeeId='`+ req.params.Id + `'
-		select ele.Code,onetime.Id, EmployeeId, PayElementId, FORMAT(EffectiveDate,'dd/MM/yyyy') as EffectiveDate, Amount, Currency, Entitlement,[PaymentDate] from [myuser].[OnetimeElement] onetime inner join [dbo].[PayElement] ele on ele.Id = onetime.PayElementId where EmployeeId='`+ req.params.Id + `'
+		select ele.Code,onetime.Id, EmployeeId, PayElementId, FORMAT(EffectiveDate,'dd/MM/yyyy') as EffectiveDate, Amount, Currency, ele.Increment As MainEntitlement,Entitlement,[PaymentDate] from [myuser].[OnetimeElement] onetime inner join [dbo].[PayElement] ele on ele.Id = onetime.PayElementId where EmployeeId='`+ req.params.Id + `'
 		select  CompanyId, BankId, IBAN, format(EffectiveDate,'dd/MM/yyyy') as EffectiveDate, IsPrimary, CurrencyCode, EmployeeId,bank.BankName from [dbo].[EmployeeBankAccount] 
 			acc inner join  [dbo].[Bank] bank on bank.Id = acc.BankId where EmployeeId='`+ req.params.Id + `'
 		select *,FORMAT(Paidon,'MMM-yyyy') as PayMonth  from [myuser].[SalaryPayRoll] where EmployeeId='`+ req.params.Id + `'

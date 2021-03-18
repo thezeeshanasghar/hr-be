@@ -17,6 +17,7 @@ const GetSelectivePayElementById = async (req, res) => {
 				}
 				else {
 					var response = profileset.recordset;
+					response.push({"value":"All","label":"All"})
 					res.send(response);
 					return ;
 				}
@@ -103,10 +104,20 @@ const GetPayElementById = async (req, res) => {
 }
 
 const InsertPayElement = async (req, res) => {
+	console.log(req.body)
 	try {
 		console.log(res);
-		var query = "Insert into PayElement(Code, Description, GroupId, Increment, Periodicity, CurrencyCode, lumpsum, noofDays, ofMonth, CompanyId,Frequency)"
+		var query = "";
+		if(req.body.noofDays !=""){
+			query=	"Insert into PayElement(Code, Description, GroupId, Increment, Periodicity, CurrencyCode, lumpsum, noofDays, ofMonth, CompanyId,Frequency)"
 		+" values('"+req.body.Code+"','"+req.body.Description+"','"+req.body.GroupId+"','"+req.body.Increment+"','"+req.body.Periodicity+"','"+req.body.CurrencyCode+"','"+req.body.lumpsum+"','"+req.body.noofDays+"','"+req.body.ofMonth+"','"+req.body.CompanyId+"','"+req.body.Frequency+"');";
+	
+		}else{
+			query=	"Insert into PayElement(Code, Description, GroupId, Increment, Periodicity, CurrencyCode, lumpsum, ofMonth, CompanyId,Frequency)"
+			+" values('"+req.body.Code+"','"+req.body.Description+"','"+req.body.GroupId+"','"+req.body.Increment+"','"+req.body.Periodicity+"','"+req.body.CurrencyCode+"','"+req.body.lumpsum+"','"+req.body.ofMonth+"','"+req.body.CompanyId+"','"+req.body.Frequency+"');";
+		
+		}
+		
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -128,9 +139,11 @@ const InsertPayElement = async (req, res) => {
 	}
 }
 const UpdatePayElement = async (req, res) => {
+	console.log(req.body);
 	try {
 		
-		var query = "update  PayElement set Code = '"+req.body.Code+"',Description = '"+req.body.Description+"',GroupId = '"+req.body.GroupId+"',Increment = '"+req.body.Increment+"',Periodicity = '"+req.body.Periodicity+"',CurrencyCode = '"+req.body.CurrencyCode+"',lumpsum = '"+req.body.lumpsum+"',noofDays = '"+req.body.noofDays+"',ofMonth = '"+req.body.ofMonth+"',CompanyId = '"+req.body.CompanyId+"' , Frequency = '"+req.body.Frequency+"' where Id = '"+req.params.Id+"' ;";
+		var query = "update  PayElement set Code = '"+req.body.Code+"',Description = '"+req.body.Description+"',GroupId = '"+req.body.GroupId+"',Increment = '"+req.body.Increment+"',Periodicity = '"+req.body.Periodicity+"',CurrencyCode = '"+req.body.CurrencyCode+"',lumpsum = '"+req.body.lumpsum+"',noofDays ="+ (req.body.noofDays=='' || req.body.noofDays==null ?'[noofDays]':req.body.noofDays)+",ofMonth = '"+req.body.ofMonth +"',CompanyId = '"+req.body.CompanyId+"' , Frequency = '"+req.body.Frequency+"' where Id = '"+req.params.Id+"' ;";
+		console.log(query,'qqq');
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -153,7 +166,6 @@ const UpdatePayElement = async (req, res) => {
 }
 const DeletePayElement= async (req, res) => {
 	try {
-		console.log(res);
 		var query = "delete from PayElement where Id in ("+req.params.Id+") ;";
 		const pool = await poolPromise
 		const result = await pool.request()

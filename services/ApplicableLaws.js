@@ -29,7 +29,7 @@ const GetAllApplicableLaws = async (req, res) => {
 const GetApplicableLawsByCompany = async (req, res) => {
 	try {
 
-		var query = "select * from  [dbo].[Applicable_laws] where CompanyId = '" + req.params.CompanyId + "' ;";
+		var query = "SELECT APP.*,LAWS.Detail from  [dbo].[Applicable_laws] APP INNER JOIN [dbo].[CountryLaws] LAWS ON LAWS.Id=APP.LawId  where APP.CompanyId = '"+req.params.CompanyId+"' ;";
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {

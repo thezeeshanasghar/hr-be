@@ -97,6 +97,8 @@
 			(CompanyId, EmployeeId, LastWorkingDate, TerminationReason)
 			values
 			('`+req.body.CompanyId+`','`+req.body.EmployeeId+`','`+req.body.lastDate+`','`+req.body.reason+`');
+
+			UPDATE [dbo].[Employees] SET CurrentEmployeeStatus=30 WHERE Id='`+req.body.EmployeeId+`';
 			`
 			const pool = await poolPromise
 			const result = await pool.request()
@@ -145,7 +147,11 @@
 	const DeleteEmployeeTermination = async (req, res) => {
 		try {
 			console.log(res);
-			var query = "delete from   [myuser].[EmployeeTermination]  where Id='"+req.params.Id+"' ;";
+			var query = `
+			Declare @EmployeeId BIGINT=0;
+			select @EmployeeId=EmployeeId from   [myuser].[EmployeeTermination]  where Id='`+req.params.Id+`' ; 
+			delete from   [myuser].[EmployeeTermination]  where Id='`+req.params.Id+`' ; 
+			UPDATE [dbo].[Employees] SET CurrentEmployeeStatus=29 WHERE Id=@EmployeeId;`;
 			const pool = await poolPromise
 			const result = await pool.request()
 				.query(query, function (err, profileset) {

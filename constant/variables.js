@@ -103,7 +103,7 @@ const PaySlipDefaultPath='/payslip';
 const payrollbyCompany=PaySlipDefaultPath +"/ByCompany/:CompanyId";
 //#endregion
 //#region Reports
-const EmployeeReport='/Report/Employee/:Id';
+const EmployeeReport='/Report/Employee';
 const EmployeepayrollReport='/Report/PayRoll';
 const EmployeeVarrianceReport="/Report/Varriance"
 const EmployeeVarrianceindvReport="/Report/indevVarriance";

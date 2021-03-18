@@ -1,6 +1,7 @@
 const EmployeeDetail=(obj)=>{
 	
 	var object=  {
+		EmployeeCode:obj[0][0].EmployeeCode,
 		InsuranceId:obj[0][0].InsuranceId,
 		TaxationId:obj[0][0].TaxationId,
 		Cnic:obj[0][0].Cnic,
@@ -21,7 +22,8 @@ const EmployeeDetail=(obj)=>{
 		PeriodicPayElements:obj[1],
 		OnetimeElement:obj[2],
 		EmployeeBankAccount:obj[3],
-		Payments:obj[4]
+		Payments:obj[4],
+		CurrentEmployeeStatus:obj[0][0].CurrentEmployeeStatus
 	}
 		return object;
 }
