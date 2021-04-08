@@ -1,9 +1,9 @@
 const sql = require('mssql')  
 const config = {  
-user: 'myuser',  
-password: '_688xwsU',  
-server: "kuicksave.com",  
-database: "kuicksav_hrms"  ,
+user: 'hrsolutionhouse.com',  
+password:"nSz4psse9@1oINng",// '_688xwsU',  
+server: "91.205.175.115\\MSSQLSERVER2012",//"kuicksave.com",  
+database:"hrsolutionhouse_com_hr"// "kuicksav_hrms"  ,
 
 }  
 const poolPromise = new sql.ConnectionPool(config)  
