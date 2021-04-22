@@ -50,7 +50,7 @@ const GetCountryLawByCountry = async (req, res) => {
 const GetCountryLawById = async (req, res) => {
 	try {
 		var query = `select * from CountryLaws where Id='` + req.params.Id + `' ;
-					select ROW_NUMBER() OVER(ORDER BY Id) AS id,maxSalary,minSalary,Discount,TaxAmount,Percentage  from LawRanges where LawId='`+req.params.Id+`' `;
+					select ROW_NUMBER() OVER(ORDER BY Id) AS id,maxSalary,minSalary,Discount,TaxAmount,Percentage  from [myuser].[LawRanges] where LawId='`+req.params.Id+`' `;
 		const pool = await poolPromise
 		const result = await pool.request()
 			.query(query, function (err, profileset) {
@@ -83,7 +83,7 @@ const InsertCountryLaw = async (req, res) => {
 		Declare @Id BIGINT=0;
 		set @Id=@@identity;
 
-		Insert into LawRanges(MaxSalary,MinSalary,Discount,Percentage,LawId,TaxAmount)
+		Insert into [myuser].[LawRanges](MaxSalary,MinSalary,Discount,Percentage,LawId,TaxAmount)
 		select maxSalary,minSalary,Discount,Percentage,@Id,TaxAmount from OPENJSON('`+ req.body.Ranges + `') with(minSalary money,maxSalary money,Discount int,Percentage INT,TaxAmount money);
 
 
@@ -120,9 +120,9 @@ const UpdateCountryLaw = async (req, res) => {
 			 NoCarryForward = '` + req.body.NoCarryForward + `', lumpsum = '` + req.body.Lumpsum + `', PaidWithin = '` + req.body.PaidWithIn + `',
 		 DeclarationMode = '` + req.body.DeclarationMode + `'  where Id = '` + req.params.Id + `'  ;
 		 
-		 delete from LawRanges where LawId ='`+req.params.Id+`'
+		 delete from [myuser].[LawRanges] where LawId ='`+req.params.Id+`'
 		 
-		 Insert into LawRanges(MaxSalary,MinSalary,Discount,Percentage,LawId,TaxAmount)
+		 Insert into [myuser].[LawRanges](MaxSalary,MinSalary,Discount,Percentage,LawId,TaxAmount)
 		 select maxSalary,minSalary,Discount,Percentage,'`+req.params.Id+`',TaxAmount from OPENJSON('`+ req.body.Ranges + `') with(minSalary money,maxSalary money,Discount int,Percentage INT,TaxAmount money);
   `;
 		 console.log(query)

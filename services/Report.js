@@ -250,7 +250,7 @@ const PdfCreater = async function (resp) {
 	doc.text(resp[i].BankName, 5, 445 + (30 * 8))
 	doc.text(resp[i].EmployeeName, 105, 445 + (30 * 8))
 	doc.text(resp[i].IBAN, 205, 445 + (30 * 8))
-	doc.text(resp[i].AccCurrency, 305, 445 + (30 * 8))
+	doc.text(resp[i].AccCurrency, 345, 445 + (30 * 8))
 	// doc.text('Bank Account/Currency', 405, 445+(30*8))
 	/*********************/
 
@@ -289,7 +289,7 @@ PAYMENT.PayElementId,Salary.CompanyId,COMPANY.CompanyName,COMPANY.Address,PAYELE
  (SELECT Name FROM [myuser].[LookupItems] WHERE Id=COMPANY.CountryCode) AS Country
 from [myuser].[SalaryPayRoll] Salary
 INNER JOIN
-[myuser].[PaymentDetail] PAYMENT ON PAYMENT.PayRollCode=Salary.PayGroup
+[myuser].[PaymentDetail] PAYMENT ON PAYMENT.PayRollCode=Salary.PayGroup AND PAYMENT.EmployeeId=Salary.EmployeeId
 LEFT JOIN
 [dbo].[Company] COMPANY ON COMPANY.Id=Salary.CompanyId
 LEFT JOIN  [dbo].[PayElement] PAYELE ON PAYELE.Id=PAYMENT.PayElementId
@@ -345,7 +345,7 @@ WHERE Salary.Id='` + req.params.Id + `'
 					})
 
 					res.status(200)
-					res.send("Pay Slip Generated Successfully");
+					res.send();
 					return "error";
 					// });
 
