@@ -38,6 +38,10 @@ WHERE PayRollCode='`+req.params.GroupName+`' AND [myuser].[PaymentDetail].Employ
 Select [myuser].[TaxationDetail].*,law.Detail from [myuser].[TaxationDetail]
 INNER JOIN [dbo].[CountryLaws] law On law.Id=[myuser].[TaxationDetail].LawId
 where GroupCode='`+req.params.GroupName+`'AND EmployeeId='`+req.params.EmployeeId+`'
+
+select * from [myuser].[PaymentDetail] detail Inner Join
+[dbo].[PayElement] pay ON pay.Id=detail.PayElementId
+where detail.PayRollCode='`+req.params.GroupName+`' AND detail.EmployeeId='`+req.params.EmployeeId+`'
 		`
 		const pool = await poolPromise
 		const result = await pool.request()

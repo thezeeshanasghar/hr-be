@@ -12,6 +12,7 @@ const BankSecondaryPath=defaultPath+'/:Id';
 const CompanydefaultPath='/Company';
 const CompanySecondaryPath=CompanydefaultPath+'/:Id';
 const CompanySelectivePath=CompanydefaultPath+'/Selective/data';
+const CompanyBankPath=CompanydefaultPath+'/Banks/:Id';
 //#endregion CostCenter
 const CostCenterdefaultPath='/CostCenter';
 const CostCenterSecondaryPath=CostCenterdefaultPath+'/:Id';
@@ -167,4 +168,4 @@ module.exports={userloginPath,userdefaultPath,message,defaultPath,BankSecondaryP
 				EmployeeAdvanceDetail,oneTimePayRoll,EmployeeSelective,ReversePayroll,specificPayroll,payrollbyCompany,changeStatuspayroll,
 				taxableByCompany,taxableSecondaryPath,taxabledefaultPath,GTNReport,
 				ApplicableLawSecondaryPath,ApplicableLawByCompany,ApplicablelawdefaultPath,downloadPath,GLReport,PaySlip,
-				PaymentDetailReport};
+				PaymentDetailReport,CompanyBankPath};

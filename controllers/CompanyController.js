@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const sql = require('mssql')
-const { CompanySecondaryPath,CompanydefaultPath,CompanySelectivePath } = require('./../constant/variables')
-const { GetAllCompanies, GetCompanyById,InsertCompany,UpdateCompany, DeleteCompany,GetSelectiveComponies} = require('./../services/Company')
+const { CompanySecondaryPath,CompanydefaultPath,CompanySelectivePath,CompanyBankPath } = require('./../constant/variables')
+const { GetAllCompanies, GetCompanyById,InsertCompany,UpdateCompany, DeleteCompany,GetSelectiveComponies,GetCompanyBank} = require('./../services/Company')
 router.get(CompanydefaultPath, async (req, res) => {
 	 GetAllCompanies(req, res);
 });
@@ -20,5 +20,8 @@ router.delete(CompanySecondaryPath, async (req, res) => {
 })
 router.get(CompanySelectivePath,async(req,res)=>{
 	GetSelectiveComponies(req,res);
+})
+router.get(CompanyBankPath,async(req,res)=>{
+	GetCompanyBank(req,res);
 })
 module.exports = router;

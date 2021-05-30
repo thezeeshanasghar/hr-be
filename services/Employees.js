@@ -201,7 +201,7 @@ const InsertEmployee = async (req, res) => {
 		const result = await pool.request()
 			.input("Title", sql.BIGINT, req.body.Title)
 			.input("Address", sql.VarChar(300), req.body.Address)
-			.input("BankId", sql.BIGINT, req.body.BankId)
+			.input("BankId", sql.BIGINT, req.body.BankId==null || req.body.BankId==""?0:req.body.BankId)
 			.input("Cnic", sql.VarChar(500), req.body.Cnic)
 			.input("CompanyId", sql.BIGINT, req.body.CompanyId)
 			.input("Contact", sql.VarChar(300), req.body.Contact)
@@ -237,6 +237,7 @@ const InsertEmployee = async (req, res) => {
 			.input("ApplicableLaws", sql.NVarChar(4000), req.body.ApplicableLaws)
 			.input("TaxationApplicable", sql.Int, req.body.TaxationApplicable)
 			.input("SocialSecurityApplicable", sql.Int, req.body.SocialSecurityApplicable)
+			.input("PayFrom", sql.BigInt, req.body.PayFrom)
 			.execute("[dbo].[InsertEmployee]").then(function (recordSet) {
 				res.status(200).json({ status: "Success" });
 				//  return ;
@@ -262,7 +263,7 @@ const UpdateEmployee = async (req, res) => {
 			.input("ContractEndDate", sql.VarChar(20), req.body.ContractEndDate)
 			.input("ContractType", sql.BIGINT, req.body.ContractType)
 			.input("Country", sql.BIGINT, req.body.Country)
-			.input("CurrencyCode", sql.BIGINT, req.body.CurrencyCode)
+			.input("CurrencyCode", sql.BIGINT, req.body.CurrencyCode==null || req.body.CurrencyCode==""?0:req.body.CurrencyCode)
 			.input("CurrentEmployeeStatus", sql.BIGINT, req.body.CurrentEmployeeStatus)
 			.input("DOB", sql.VarChar(20), req.body.DOB)
 			.input("EffectiveDate", sql.VarChar(20), req.body.EffectiveDate)
@@ -292,6 +293,7 @@ const UpdateEmployee = async (req, res) => {
 			.input("TaxationApplicable", sql.Bit, req.body.TaxationApplicable)
 			.input("SocialSecurityApplicable", sql.Bit, req.body.SocialSecurityApplicable)
 			.input("type", sql.VarChar(100), req.body.type)
+			.input("PayFrom", sql.BigInt, req.body.PayFrom)
 			.execute("[dbo].[UpdateEmployee]").then(function (recordSet) {
 				res.status(200).json({ status: "Success" });
 				//  return ;
