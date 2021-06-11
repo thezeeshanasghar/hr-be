@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const {EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,EmployeeVarrianceindvReport,GTNReport,downloadPath,GLReport,PaySlip,PaymentDetailReport} = require('./../constant/variables')
-const {GetEmployeeReport,GetEmployeePayrollReport,GetEmployeeVarrianceReport,getIndvVarriancereport,GetGTNReport,download,GetGLReport,GeneratePaySlip,GetPaymentDetails} = require('./../services/Report')
+const {EmployeeReport,EmployeepayrollReport,EmployeeVarrianceReport,EmployeeVarrianceindvReport,GTNReport,downloadPath,GLReport,PaySlip,PaymentDetailReport,DatesListbyCompany} = require('./../constant/variables')
+const {GetDatesListbyCompany,GetEmployeeReport,GetEmployeePayrollReport,GetEmployeeVarrianceReport,getIndvVarriancereport,GetGTNReport,download,GetGLReport,GeneratePaySlip,GetPaymentDetails} = require('./../services/Report')
 router.post(EmployeeReport, async (req, res) => {
 	GetEmployeeReport(req, res);
 });
@@ -30,6 +30,8 @@ router.get(PaySlip, async (req, res) => {
 router.get(PaymentDetailReport, async (req, res) => {
 	GetPaymentDetails(req, res);
 });
-
+router.get(DatesListbyCompany, async (req, res) => {
+	GetDatesListbyCompany(req, res);
+});
 
 module.exports = router;

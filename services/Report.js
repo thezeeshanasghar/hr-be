@@ -65,6 +65,32 @@ where detail.PayRollCode='`+req.params.GroupName+`' AND detail.EmployeeId='`+req
 	}
 }
 
+const GetDatesListbyCompany = async (req, res) => {
+	
+	try {
+		var query = "select distinct format(Paidon,'yyyy-MM') AS DateValue,format(Paidon,'MMM-yyyy') AS Date from [myuser].[SalaryPayRoll] where CompanyId='"+req.params.Id+"';";
+		const pool = await poolPromise
+		const result = await pool.request()
+			.query(query, function (err, profileset) {
+				if (err) {
+					res.status(500)
+					res.send(message.error)
+					return "error";
+				}
+				else {
+					var response = profileset.recordset;
+					res.send(response);
+					return ;
+				}
+			})
+	} catch (err) {
+		res.status(500)
+		res.send(message.error)
+		return "error";
+	}
+}
+
+
 const PdfCreater = async function (resp) {
 	var Entitlement = 0,
 		Deduction = 0;
@@ -1317,12 +1343,14 @@ const GetGTNReport = async (req, res) => {
 				worksheet.column(19).setWidth(30);
 				worksheet.column(20).setWidth(30);
 				var OUTPUT = [];
+			
+			
 				for (var i = 0; i < response.length; i++) {
 					var OBJ = {};
 					for (var z = 5; z < Objects.length; z++) {
-						console.log(response[i][Objects[x]]);
-						worksheet.cell(i + 10, z - 4).string(Number.isInteger(response[i][Objects[z]]) ? response[i][Objects[z]].toString() : response[i][Objects[z]]).style(style1);
-						OBJ[z] = Number.isInteger(response[i][Objects[z]]) ? response[i][Objects[z]] : 0;
+			
+						worksheet.cell(i + 10, z - 4).string(response[i][Objects[z]]==null || response[i][Objects[z]]==undefined?"":response[i][Objects[z]].toString()).style(style1);
+						OBJ[z] = parseFloat(response[i][Objects[z]])?Math.trunc(response[i][Objects[z]]) : 0;
 
 					}
 					OUTPUT.push(OBJ);
@@ -1343,7 +1371,7 @@ const GetGTNReport = async (req, res) => {
 
 				for (var z = 1; z < Objects.length; z++) {
 
-					worksheet.cell(response.length + 10, z + 1).string(result[Object.keys(result)[z]] != undefined && result[Object.keys(result)[z]] != "0" && result[Object.keys(result)[z]] != null ? result[Object.keys(result)[z]].toString() : "").style(_style)
+					worksheet.cell(response.length + 10, z + 1).string(result[Object.keys(result)[z]] != undefined && result[Object.keys(result)[z]] != "0" && result[Object.keys(result)[z]] != null && result[Object.keys(result)[z]] != NaN ? result[Object.keys(result)[z]].toString()==NaN?"":result[Object.keys(result)[z]].toString() : "").style(_style)
 				}
 
 				workbook.write(Path);
@@ -1370,5 +1398,6 @@ module.exports = {
 	download,
 	GetGLReport,
 	GeneratePaySlip,
-	GetPaymentDetails
+	GetPaymentDetails,
+	GetDatesListbyCompany
 };
